@@ -1,0 +1,30 @@
+#!/bin/sh
+# Enforces Conventional Commits: <type>(<optional scope>): <subject>
+# https://www.conventionalcommits.org/
+
+commit_msg_file="$1"
+first_line=$(head -n1 "$commit_msg_file")
+
+# Allow merge/revert/fixup commits to pass through unchanged.
+case "$first_line" in
+    "Merge "*|"Revert "*|"fixup! "*|"squash! "*|"amend! "*)
+        exit 0
+        ;;
+esac
+
+pattern='^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert)(\([a-z0-9._-]+\))?!?: .{1,72}$'
+
+if ! printf '%s' "$first_line" | grep -Eq "$pattern"; then
+    echo "ERROR: Commit message does not follow Conventional Commits." >&2
+    echo "" >&2
+    echo "Format: <type>(<optional scope>): <subject>" >&2
+    echo "Types:  feat, fix, docs, style, refactor, perf, test, chore, build, ci, revert" >&2
+    echo "" >&2
+    echo "Examples:" >&2
+    echo "  feat(core): add button element" >&2
+    echo "  fix(cli): handle invalid element name" >&2
+    echo "  chore(deps)!: drop Gleam 1.11 support" >&2
+    echo "" >&2
+    echo "Got: $first_line" >&2
+    exit 1
+fi

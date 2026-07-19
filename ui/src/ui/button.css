@@ -1,0 +1,220 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="button"] {
+    @apply relative cursor-pointer inline-flex shrink-0 items-center
+    justify-center rounded-sm border font-medium whitespace-nowrap
+    transition-[background-color,border-color,color,box-shadow,scale]
+    duration-200 ease-out-soft select-none;
+  }
+
+  /* --- Child SVGs --------------------------------------------------------- */
+  [data-slot="button"] svg {
+    @apply pointer-events-none shrink-0;
+  }
+  [data-slot="button"] svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-4;
+  }
+
+  /* --- Pending Overlay ---------------------------------------------------- */
+  [data-slot="button"] > [data-slot="spinner"] {
+    @apply hidden absolute inset-0 m-auto size-4.5;
+  }
+  [data-slot="button"][aria-busy="true"] > [data-slot="spinner"] {
+    @apply block;
+  }
+
+  /* --- Primary (Default Variant) ------------------------------------------ */
+  [data-slot="button"]:not([data-variant]),
+  [data-slot="button"][data-variant="primary"] {
+    @apply bg-primary border-transparent text-primary-foreground;
+  }
+  [data-slot="button"]:not([data-variant]):hover,
+  [data-slot="button"]:not([data-variant])[aria-expanded="true"],
+  [data-slot="button"][data-variant="primary"]:hover,
+  [data-slot="button"][data-variant="primary"][aria-expanded="true"] {
+    @apply bg-(--primary-hover);
+  }
+  [data-slot="button"]:not([data-variant]) > [data-slot="spinner"],
+  [data-slot="button"][data-variant="primary"] > [data-slot="spinner"] {
+    @apply stroke-primary-foreground;
+  }
+
+  /* --- Secondary (Variant) ------------------------------------------------ */
+  [data-slot="button"][data-variant="secondary"] {
+    @apply bg-muted border-border text-muted-foreground;
+  }
+  [data-slot="button"][data-variant="secondary"]:hover,
+  [data-slot="button"][data-variant="secondary"][aria-expanded="true"] {
+    @apply bg-(--secondary-hover) border-border-strong;
+  }
+  [data-slot="button"][data-variant="secondary"] > [data-slot="spinner"] {
+    @apply stroke-secondary-foreground;
+  }
+
+  /* --- Accent (Variant) --------------------------------------------------- */
+  [data-slot="button"][data-variant="accent"] {
+    @apply bg-accent border-(--accent-border) text-accent-foreground;
+  }
+  [data-slot="button"][data-variant="accent"]:hover,
+  [data-slot="button"][data-variant="accent"][aria-expanded="true"] {
+    @apply bg-(--accent-hover) border-(--accent-hover);
+  }
+  [data-slot="button"][data-variant="accent"] > [data-slot="spinner"] {
+    @apply stroke-accent-foreground;
+  }
+
+  /* --- Outline (Variant) -------------------------------------------------- */
+  [data-slot="button"][data-variant="outline"] {
+    @apply border-border bg-transparent text-foreground;
+  }
+  [data-slot="button"][data-variant="outline"]:hover,
+  [data-slot="button"][data-variant="outline"][aria-expanded="true"] {
+    @apply border-border-strong bg-foreground/2;
+  }
+  [data-slot="button"][data-variant="outline"] > [data-slot="spinner"] {
+    @apply stroke-foreground;
+  }
+
+  /* --- Ghost (Variant) ---------------------------------------------------- */
+  [data-slot="button"][data-variant="ghost"] {
+    @apply bg-transparent border-transparent text-foreground;
+  }
+  [data-slot="button"][data-variant="ghost"]:hover,
+  [data-slot="button"][data-variant="ghost"][aria-expanded="true"] {
+    @apply bg-foreground/7.5;
+  }
+  [data-slot="button"][data-variant="ghost"] > [data-slot="spinner"] {
+    @apply stroke-foreground;
+  }
+
+  /* --- Destructive (Variant) ---------------------------------------------- */
+  [data-slot="button"][data-variant="destructive"] {
+    @apply bg-destructive border-(--destructive-border)
+           text-destructive-foreground;
+  }
+  [data-slot="button"][data-variant="destructive"]:hover,
+  [data-slot="button"][data-variant="destructive"][aria-expanded="true"] {
+    @apply bg-(--destructive-hover);
+  }
+  [data-slot="button"][data-variant="destructive"] > [data-slot="spinner"] {
+    @apply stroke-destructive-foreground;
+  }
+
+  /* --- Extra Small (Size) ------------------------------------------------- */
+  [data-slot="button"][data-size="xs"] {
+    @apply h-7 gap-1 px-2 text-2xs;
+  }
+  [data-slot="button"][data-size="xs"]:has([data-icon="inline-end"]) {
+    @apply pe-1.5;
+  }
+  [data-slot="button"][data-size="xs"]:has([data-icon="inline-start"]) {
+    @apply ps-1.5;
+  }
+  [data-slot="button"][data-size="xs"]
+    svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-2.5;
+  }
+  [data-slot="button"][data-size="xs"] > [data-slot="spinner"] {
+    @apply size-3;
+  }
+
+  /* --- Small (Size) ------------------------------------------------------- */
+  [data-slot="button"][data-size="sm"] {
+    @apply h-8 gap-1.5 px-3 text-xs;
+  }
+  [data-slot="button"][data-size="sm"]:has([data-icon="inline-end"]) {
+    @apply pe-2;
+  }
+  [data-slot="button"][data-size="sm"]:has([data-icon="inline-start"]) {
+    @apply ps-2;
+  }
+  [data-slot="button"][data-size="sm"]
+    svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-3;
+  }
+  [data-slot="button"][data-size="sm"] > [data-slot="spinner"] {
+    @apply size-3.5;
+  }
+
+  /* --- Medium (Default Size) ---------------------------------------------- */
+  [data-slot="button"]:not([data-size]),
+  [data-slot="button"][data-size="md"] {
+    @apply h-9 gap-1.5 px-4 text-sm;
+  }
+  [data-slot="button"]:not([data-size]):has([data-icon="inline-end"]),
+  [data-slot="button"][data-size="md"]:has([data-icon="inline-end"]) {
+    @apply pe-3;
+  }
+  [data-slot="button"]:not([data-size]):has([data-icon="inline-start"]),
+  [data-slot="button"][data-size="md"]:has([data-icon="inline-start"]) {
+    @apply ps-3;
+  }
+
+  /* --- Large (Size) ------------------------------------------------------- */
+  [data-slot="button"][data-size="lg"] {
+    @apply h-10 gap-2 px-5 text-sm;
+  }
+  [data-slot="button"][data-size="lg"]:has([data-icon="inline-end"]) {
+    @apply pe-4;
+  }
+  [data-slot="button"][data-size="lg"]:has([data-icon="inline-start"]) {
+    @apply ps-4;
+  }
+  [data-slot="button"][data-size="lg"]
+    svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-4;
+  }
+  [data-slot="button"][data-size="lg"] > [data-slot="spinner"] {
+    @apply size-5;
+  }
+
+  /* --- Icon Only ---------------------------------------------------------- */
+  [data-slot="button"][data-icon-only="true"] {
+    @apply px-0! aspect-square;
+  }
+  [data-slot="button"][data-size="xs"][data-icon-only="true"]
+    svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-3;
+  }
+  [data-slot="button"][data-size="sm"][data-icon-only="true"]
+    svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-3.5;
+  }
+  [data-slot="button"][data-icon-only="true"]
+    svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-4.5;
+  }
+  [data-slot="button"][data-size="lg"][data-icon-only="true"]
+    svg:not([class*="size-"]):not([data-slot="spinner"]) {
+    @apply size-4.5;
+  }
+
+  /* --- Full-Width --------------------------------------------------------- */
+  [data-slot="button"][data-full-width="true"] {
+    @apply w-full;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+  [data-slot="button"]:focus-visible {
+    @apply outline-2 outline-offset-0 border-outline!;
+  }
+  [data-slot="button"]:active {
+    @apply scale-[0.99];
+  }
+  [data-slot="button"]:disabled,
+  [data-slot="button"][aria-disabled="true"],
+  [data-slot="button"][aria-busy="true"] {
+    @apply pointer-events-none opacity-50;
+  }
+  [data-slot="button"][aria-invalid="true"] {
+    @apply ring-error/40 ring-2 border-error!;
+  }
+  /* Invalid + focused: drop the ring (it tints the translucent focus
+     outline); the error border keeps the state visible. */
+  [data-slot="button"][aria-invalid="true"]:focus-visible {
+    @apply ring-0 border-error!;
+  }
+  [data-slot="button"][aria-busy="true"]:has(> [data-slot="spinner"]) {
+    @apply text-transparent!;
+  }
+}

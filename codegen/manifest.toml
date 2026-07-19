@@ -1,0 +1,37 @@
+# Do not manually edit this file, it is managed by Gleam.
+#
+# This file locks the dependency versions used, to make your build
+# deterministic and to prevent unexpected versions from being included
+# in your application.
+#
+# You should check this file into your source control repository.
+
+packages = [
+  { name = "contour", version = "1.2.1", build_tools = ["gleam"], requirements = ["gleam_community_ansi", "gleam_stdlib", "glexer", "houdini"], otp_app = "contour", source = "hex", outer_checksum = "C7895472BBAAC5D15DBDBAF6DD1847F6981F2F6132F726BAD30434A6E3BAAB95" },
+  { name = "drip_registry", version = "0.1.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], source = "local", path = "../registry" },
+  { name = "filepath", version = "1.1.2", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "filepath", source = "hex", outer_checksum = "B06A9AF0BF10E51401D64B98E4B627F1D2E48C154967DA7AF4D0914780A6D40A" },
+  { name = "gleam_community_ansi", version = "1.5.0", build_tools = ["gleam"], requirements = ["gleam_community_colour", "gleam_regexp", "gleam_stdlib"], otp_app = "gleam_community_ansi", source = "hex", outer_checksum = "B5AA433AF84313E23FDF90CCFF752B9380FE9FFCE02B2949D49B7AACCC77B16D" },
+  { name = "gleam_community_colour", version = "2.0.4", build_tools = ["gleam"], requirements = ["gleam_json", "gleam_stdlib"], otp_app = "gleam_community_colour", source = "hex", outer_checksum = "6DB4665555D7D2B27F0EA32EF47E8BEBC4303821765F9C73D483F38EE24894F0" },
+  { name = "gleam_json", version = "3.1.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "gleam_json", source = "hex", outer_checksum = "44FDAA8847BE8FC48CA7A1C089706BD54BADCC4C45B237A992EDDF9F2CDB2836" },
+  { name = "gleam_regexp", version = "1.1.1", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "gleam_regexp", source = "hex", outer_checksum = "9C215C6CA84A5B35BB934A9B61A9A306EC743153BE2B0425A0D032E477B062A9" },
+  { name = "gleam_stdlib", version = "1.0.3", build_tools = ["gleam"], requirements = [], otp_app = "gleam_stdlib", source = "hex", outer_checksum = "1F543AFBA5D33DA493E6087F4E4C4F20D899411343512686C98A8ABB2963CF22" },
+  { name = "gleeunit", version = "1.11.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "gleeunit", source = "hex", outer_checksum = "EC31ABA74256AEA531EDF8169931D775BBB384FED0A8A1BDC4DD9354E3E21826" },
+  { name = "glexer", version = "2.4.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "splitter"], otp_app = "glexer", source = "hex", outer_checksum = "5AB2401BF251699746B3551EF699ECC1D94FE2897C15041F181614B089125CA0" },
+  { name = "houdini", version = "1.2.1", build_tools = ["gleam"], requirements = [], otp_app = "houdini", source = "hex", outer_checksum = "6F8AC2F12974567FB744BEA66AC93CEB76AAEA19AD28564623F76CDA9BC26A85" },
+  { name = "just", version = "2.1.0", build_tools = ["gleam"], requirements = ["gleam_community_ansi", "gleam_stdlib", "houdini", "splitter"], otp_app = "just", source = "hex", outer_checksum = "F083289B9DCF797FA83B5F195738E9922BDBCCC2F0537EABA26B707CC00B0E50" },
+  { name = "shellout", version = "1.8.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "shellout", source = "hex", outer_checksum = "C416356D45151F298108C9DB9CD1EDE0313F620B5EDBB5766CD7237659D87841" },
+  { name = "simplifile", version = "2.5.0", build_tools = ["gleam"], requirements = ["filepath", "gleam_stdlib"], otp_app = "simplifile", source = "hex", outer_checksum = "6C72DCCDF25C38A5931740B30E823969F33106831FD1637719B5EDBCA30027A4" },
+  { name = "splitter", version = "1.2.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "splitter", source = "hex", outer_checksum = "3DFD6B6C49E61EDAF6F7B27A42054A17CFF6CA2135FF553D0CB61C234D281DD0" },
+  { name = "swatch", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_community_ansi", "gleam_stdlib", "houdini"], otp_app = "swatch", source = "hex", outer_checksum = "E5BF501FF3A9C836FBC3BA1629FAF79B4D6462F8079E062B51412E8978628B70" },
+]
+
+[requirements]
+contour = { version = ">= 1.2.1 and < 2.0.0" }
+drip_registry = { path = "../registry" }
+gleam_json = { version = ">= 3.0.0 and < 4.0.0" }
+gleam_stdlib = { version = ">= 1.0.0 and < 2.0.0" }
+gleeunit = { version = ">= 1.0.0 and < 2.0.0" }
+just = { version = ">= 2.1.0 and < 3.0.0" }
+shellout = { version = ">= 1.8.0 and < 2.0.0" }
+simplifile = { version = ">= 2.4.0 and < 3.0.0" }
+swatch = { version = ">= 1.0.0 and < 2.0.0" }

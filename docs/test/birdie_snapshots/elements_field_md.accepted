@@ -1,0 +1,524 @@
+---
+version: 2.0.1
+title: elements/field.md
+---
+# Field
+
+A layout that pairs a form control with its label, description, and message.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([attribute.class("w-72")], [
+    field.label([attribute.for("email")], [html.text("Email")]),
+    text_field.input([
+      attribute.id("email"),
+      attribute.type_("email"),
+      attribute.placeholder("ada@glow.dev"),
+    ]),
+    field.description([], [
+      html.text("We'll only contact you about your account."),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add field
+```
+
+## Usage
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([attribute.class("w-64")], [
+    field.label([attribute.for("display-name")], [html.text("Display name")]),
+    text_field.input([
+      attribute.id("display-name"),
+      attribute.placeholder("Ada Lovelace"),
+    ]),
+    field.description([], [
+      html.text("Shown on your profile and next to your comments."),
+    ]),
+  ])
+}
+```
+
+## Examples
+
+Pair any control with a label and description, group related fields, and surface validation errors.
+
+### Text Field
+
+Stack a label, text field, and description inside a field with the vertical attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-64")], [
+    field.label([attribute.for("username")], [html.text("Username")]),
+    text_field.input([
+      attribute.id("username"),
+      attribute.placeholder("ada"),
+    ]),
+    field.description([], [html.text("Lowercase letters and underscores.")]),
+  ])
+}
+```
+
+### Text Area
+
+Capture multi-line input in a text area with the vertical attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_area
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-72")], [
+    field.label([attribute.for("feedback")], [html.text("Feedback")]),
+    text_area.input(
+      [
+        attribute.id("feedback"),
+        attribute.placeholder("Tell us what you think..."),
+      ],
+      "",
+    ),
+    field.description([], [
+      html.text("Share anything that would make Drip better."),
+    ]),
+  ])
+}
+```
+
+### Checkbox
+
+Set a checkbox inline with its label using the horizontal attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-72")], [
+    checkbox.input([
+      attribute.id("email-notifications"),
+      attribute.checked(True),
+    ]),
+    field.content([], [
+      field.label([attribute.for("email-notifications")], [
+        html.text("Email notifications"),
+      ]),
+      field.description([], [
+        html.text("Send a digest of activity once per week."),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Switch
+
+Pair a switch with an inline label using the horizontal attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/switch
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-fit")], [
+    field.label([attribute.for("reduced-motion")], [
+      html.text("Reduced motion"),
+    ]),
+    switch.input([
+      attribute.id("reduced-motion"),
+      attribute.checked(True),
+    ]),
+  ])
+}
+```
+
+### Radio Group
+
+Nest horizontal fields inside a radio group so each option pairs with a field label.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  field.set([attribute.class("w-72")], [
+    field.legend([attribute.id("subscription-plan-legend")], [
+      html.text("Subscription plan"),
+    ]),
+    field.description([], [
+      html.text("Yearly and lifetime plans offer the biggest savings."),
+    ]),
+    radio_group.root([attribute.aria_labelledby("subscription-plan-legend")], [
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-monthly"),
+          attribute.name("subscription-plan"),
+          attribute.value("monthly"),
+          attribute.checked(True),
+        ]),
+        field.label([attribute.for("plan-monthly")], [html.text("Monthly")]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-yearly"),
+          attribute.name("subscription-plan"),
+          attribute.value("yearly"),
+        ]),
+        field.label([attribute.for("plan-yearly")], [html.text("Yearly")]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-lifetime"),
+          attribute.name("subscription-plan"),
+          attribute.value("lifetime"),
+        ]),
+        field.label([attribute.for("plan-lifetime")], [html.text("Lifetime")]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Radio Card
+
+Wrap a field root in a label to turn each option into a selection card.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  field.set([attribute.class("w-80")], [
+    field.legend([], [html.text("Compute environment")]),
+    field.description([], [html.text("Choose where your GPU workloads run.")]),
+    field.group([], [
+      field.label([], [
+        field.root([field.horizontal()], [
+          field.content([], [
+            field.title([], [html.text("Kubernetes")]),
+            field.description([], [
+              html.text("Run GPU workloads on a managed K8s cluster."),
+            ]),
+          ]),
+          radio_group.item([
+            attribute.id("env-kubernetes"),
+            attribute.name("compute-environment"),
+            attribute.value("kubernetes"),
+            attribute.checked(True),
+          ]),
+        ]),
+      ]),
+      field.label([], [
+        field.root([field.horizontal()], [
+          field.content([], [
+            field.title([], [html.text("Virtual machine")]),
+            field.description([], [
+              html.text("Spin up a dedicated VM with direct GPU access."),
+            ]),
+          ]),
+          radio_group.item([
+            attribute.id("env-vm"),
+            attribute.name("compute-environment"),
+            attribute.value("vm"),
+          ]),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Invalid
+
+Set aria-invalid on the control and add a field error element to surface validation errors.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([attribute.class("w-72")], [
+    field.label([attribute.for("work-email")], [html.text("Work email")]),
+    text_field.input([
+      attribute.id("work-email"),
+      attribute.type_("email"),
+      attribute.value("not-an-email"),
+      attribute.aria_invalid("true"),
+    ]),
+    field.error([], [html.text("Enter a valid email address.")]),
+  ])
+}
+```
+
+### Required
+
+Mark the control required and the surrounding label will surface an accent asterisk.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([attribute.class("w-72")], [
+    field.label([attribute.for("full-name")], [html.text("Full name")]),
+    text_field.input([
+      attribute.id("full-name"),
+      attribute.required(True),
+      attribute.placeholder("Ada Lovelace"),
+    ]),
+  ])
+}
+```
+
+### Disabled
+
+Disable the control with the disabled attribute to block input and dim the surrounding label.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([attribute.class("w-72")], [
+    field.label([attribute.for("workspace-handle")], [
+      html.text("Workspace handle"),
+    ]),
+    text_field.input([
+      attribute.id("workspace-handle"),
+      attribute.value("acme"),
+      attribute.disabled(True),
+    ]),
+  ])
+}
+```
+
+### Group
+
+Wrap several fields in a field group for consistent spacing and a shared container query.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.group([attribute.class("w-72")], [
+    field.root([], [
+      field.label([attribute.for("first-name")], [html.text("First name")]),
+      text_field.input([
+        attribute.id("first-name"),
+        attribute.placeholder("Ada"),
+      ]),
+    ]),
+    field.root([], [
+      field.label([attribute.for("last-name")], [html.text("Last name")]),
+      text_field.input([
+        attribute.id("last-name"),
+        attribute.placeholder("Lovelace"),
+      ]),
+    ]),
+    field.root([], [
+      field.label([attribute.for("email-address")], [html.text("Email")]),
+      text_field.input([
+        attribute.id("email-address"),
+        attribute.type_("email"),
+        attribute.placeholder("ada@glow.dev"),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Set & Legend
+
+Bind related fields under a field set with a legend.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.set([attribute.class("w-72")], [
+    field.legend([], [html.text("Workspace")]),
+    field.description([], [
+      html.text("Shown wherever your workspace appears."),
+    ]),
+    field.group([], [
+      field.root([], [
+        field.label([attribute.for("display-name")], [
+          html.text("Display name"),
+        ]),
+        text_field.input([
+          attribute.id("display-name"),
+          attribute.placeholder("Acme Inc"),
+        ]),
+      ]),
+      field.root([], [
+        field.label([attribute.for("handle")], [
+          html.text("Workspace handle"),
+        ]),
+        text_field.input([
+          attribute.id("handle"),
+          attribute.placeholder("acme"),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Separator
+
+Drop a field separator between fields to break a form into sections. Pass children to render a centered label.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.group([attribute.class("w-72")], [
+    field.root([], [
+      field.label([attribute.for("current-password")], [
+        html.text("Current password"),
+      ]),
+      text_field.input([
+        attribute.id("current-password"),
+        attribute.type_("password"),
+        attribute.placeholder("Enter current password"),
+      ]),
+    ]),
+    field.separator([], [html.text("then")]),
+    field.root([], [
+      field.label([attribute.for("new-password")], [html.text("New password")]),
+      text_field.input([
+        attribute.id("new-password"),
+        attribute.type_("password"),
+        attribute.placeholder("At least 8 characters"),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Orientation Attributes
+
+Three orientation attributes for the field root, one per layout. Pass one into the root's attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `field.vertical()` | Label stacked above the control; the default when no orientation attribute is set. |
+| `field.horizontal()` | Label inline beside the control. |
+| `field.responsive()` | Vertical until the parent field group reaches a minimum width, then horizontal. |
+
+### Elements
+
+Composition slots used inside a field root.
+
+| Element | Description |
+| --- | --- |
+| `field.root(attrs, children)` | The field root. |
+| `field.label(attrs, children)` | Renders a label bound to a control via the for attribute. |
+| `field.title(attrs, children)` | Heading for a field whose wrapping label already binds the control, as in a checkbox or radio card. |
+| `field.description(attrs, children)` | Helper text rendered below the control. |
+| `field.error(attrs, children)` | Validation message with role="alert". |
+| `field.content(attrs, children)` | Wraps a label and description in a horizontal field. |
+| `field.group(attrs, children)` | Stacks fields with consistent spacing. |
+| `field.set(attrs, children)` | Wrapper that binds related fields together for screen readers. |
+| `field.legend(attrs, children)` | Native legend, sized for section headings. |
+| `field.legend_label(attrs, children)` | Native legend, sized to match a field label. |
+| `field.separator(attrs, children)` | Horizontal divider between fields. Children render as a centered label over the line. |
+
+### Attributes
+
+Standard Lustre attributes the field responds to. Pass them on the inner control or label.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.for("id")` | On field label, binds the label to the control's id. |
+| `attribute.required(True)` | On the inner control, surfaces an accent asterisk on the surrounding label. |
+| `attribute.aria_invalid("true")` | On the inner control, surfaces its error ring; pair with a field error to announce the validation message. |
+| `attribute.disabled(True)` | On the inner control, dims the surrounding label. |
+
+### Selectors
+
+CSS selectors stamped on the field's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="field"]` | A field root. |
+| `[data-orientation="vertical\|horizontal\|..."]` | The field root, tagged with its active orientation. |
+| `[data-slot="field-label"]` | A field label or title. |
+| `[data-slot="field-required"]` | The accent asterisk surfaced when a control is required. |
+| `[data-slot="field-description"]` | The helper text below the control. |
+| `[data-slot="field-error"]` | The validation message. |
+| `[data-slot="field-content"]` | The label/description block in a horizontal field. |
+| `[data-slot="field-group"]` | A group wrapper, also the container-query root. |
+| `[data-slot="field-set"]` | The native fieldset wrapper. |
+| `[data-slot="field-legend"]` | The native legend. |
+| `[data-variant="legend\|label"]` | The legend, tagged for section heading vs label sizing. |
+| `[data-slot="separator"][data-variant="field"]` | A separator between groups of fields. |
+
+## Accessibility
+
+**Native semantics, screen reader ready.** Field roots carry role="group" so the label, control, and helper text announce as one unit, and field error carries role="alert" so validation is announced the moment it appears. Bind each control to its field label with a matching for attribute, and group related controls in a field set with a field legend.
+

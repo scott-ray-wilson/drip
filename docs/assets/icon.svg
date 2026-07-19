@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- adapts to the browser color scheme: navy tile + pink mark in dark, swapped in light -->
+  <style>
+    .tile { fill: #0b0f17 }
+    .mark { stroke: #ffaff3 }
+    @media (prefers-color-scheme: light) {
+      .tile { fill: #ffaff3 }
+      .mark { stroke: #0b0f17 }
+    }
+  </style>
+  <rect class="tile" width="48" height="48" rx="7.5"/>
+  <g class="mark" transform="translate(8 8) scale(1.3333)" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"/>
+    <rect x="14" y="2" width="8" height="8" rx="1"/>
+  </g>
+</svg>

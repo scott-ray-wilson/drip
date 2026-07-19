@@ -1,0 +1,479 @@
+---
+version: 2.0.1
+title: elements/button.md
+---
+# Button
+
+An interactive control that triggers an action, submits a form, or resets it.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/icon
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.button([], [html.text("Primary")]),
+    button.button([button.icon_only(), attribute.aria_label("Next")], [
+      icon.arrow_right([]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add button
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([], [html.text("Click me")])
+}
+```
+
+## Variants
+
+Six visual styles to cover anything from primary CTAs to ghost-style toolbar controls.
+
+### Primary
+
+The standard high-contrast variant for primary page actions.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([], [html.text("Primary Button")])
+}
+```
+
+### Secondary
+
+Lower-emphasis filled button for supporting actions that sit beside a primary.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([button.secondary()], [html.text("Secondary Button")])
+}
+```
+
+### Accent
+
+Brand-aligned button for feature actions and high-visibility CTAs.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([button.accent()], [html.text("Accent Button")])
+}
+```
+
+### Outline
+
+Bordered, transparent button for low-emphasis actions that still need a visible affordance.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([button.outline()], [html.text("Outline Button")])
+}
+```
+
+### Ghost
+
+Borderless, transparent button for the lowest-emphasis actions and toolbar controls.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([button.ghost()], [html.text("Ghost Button")])
+}
+```
+
+### Destructive
+
+Filled button for irreversible or dangerous actions like delete, remove, or revoke.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([button.destructive()], [html.text("Destructive Button")])
+}
+```
+
+## Examples
+
+Adjust the size, state, or layout of a button with modifier attributes.
+
+### Inline Icon
+
+Include leading or trailing icons in your buttons using the inline slots.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/icon
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.button([button.ghost(), button.xs()], [
+      icon.plus([button.icon_start()]),
+      html.text("Create New"),
+    ]),
+    button.button([button.secondary(), button.sm()], [
+      icon.copy([button.icon_start()]),
+      html.text("Copy"),
+    ]),
+    button.button([], [
+      html.text("Download"),
+      icon.download([button.icon_end()]),
+    ]),
+    button.button([button.destructive(), button.lg()], [
+      icon.trash([button.icon_start()]),
+      html.text("Delete Record"),
+    ]),
+  ])
+}
+```
+
+### Icon Only
+
+Render a square button sized for a single icon child using the icon only attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import ui/button
+import ui/icon
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.button(
+      [button.icon_only(), button.xs(), attribute.aria_label("Next")],
+      [icon.arrow_right([])],
+    ),
+    button.button(
+      [
+        button.secondary(),
+        button.icon_only(),
+        button.sm(),
+        attribute.aria_label("Change layout"),
+      ],
+      [icon.layout_template([])],
+    ),
+    button.button(
+      [button.outline(), button.icon_only(), attribute.aria_label("Close")],
+      [icon.x([])],
+    ),
+    button.button(
+      [
+        button.destructive(),
+        button.icon_only(),
+        button.lg(),
+        attribute.aria_label("Delete"),
+      ],
+      [icon.trash([])],
+    ),
+  ])
+}
+```
+
+### Sizes
+
+Scale a button from extra small to large using the various size attributes.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.button([button.xs()], [html.text("Extra Small")]),
+    button.button([button.sm()], [html.text("Small")]),
+    button.button([], [html.text("Medium")]),
+    button.button([button.lg()], [html.text("Large")]),
+  ])
+}
+```
+
+### Disabled
+
+Block interactivity and reduce opacity using the disabled attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/icon
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.button([attribute.disabled(True)], [html.text("Primary")]),
+    button.button([button.ghost(), attribute.disabled(True)], [
+      html.text("Ghost"),
+    ]),
+    button.button([button.destructive(), attribute.disabled(True)], [
+      html.text("Destructive"),
+    ]),
+    button.button(
+      [
+        attribute.disabled(True),
+        button.icon_only(),
+        attribute.aria_label("Next"),
+      ],
+      [icon.arrow_right([])],
+    ),
+  ])
+}
+```
+
+### Pending
+
+Mark a button as busy by setting aria-busy, revealing a spinner child if present. Pair with disabled.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/icon
+import ui/spinner
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.button(
+      [
+        button.secondary(),
+        attribute.aria_busy(True),
+        attribute.disabled(True),
+        button.xs(),
+      ],
+      [spinner.icon([]), html.text("Secondary")],
+    ),
+    button.button(
+      [
+        button.outline(),
+        attribute.aria_busy(True),
+        attribute.disabled(True),
+        button.sm(),
+      ],
+      [spinner.icon([]), html.text("Outline")],
+    ),
+    button.button(
+      [
+        button.destructive(),
+        attribute.aria_busy(True),
+        attribute.disabled(True),
+      ],
+      [
+        spinner.icon([]),
+        html.text("Destructive"),
+      ],
+    ),
+    button.button(
+      [
+        attribute.aria_busy(True),
+        attribute.disabled(True),
+        button.icon_only(),
+        button.lg(),
+        attribute.aria_label("Next"),
+      ],
+      [spinner.icon([]), icon.arrow_right([])],
+    ),
+  ])
+}
+```
+
+### Invalid
+
+Surface an error ring when a button is the visible trigger for an invalid form control by setting aria-invalid.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.button([attribute.aria_invalid("true")], [html.text("Primary")]),
+    button.button([button.outline(), attribute.aria_invalid("true")], [
+      html.text("Outline"),
+    ]),
+    button.button([button.ghost(), attribute.aria_invalid("true")], [
+      html.text("Ghost"),
+    ]),
+    button.button([button.destructive(), attribute.aria_invalid("true")], [
+      html.text("Destructive"),
+    ]),
+  ])
+}
+```
+
+### Full Width
+
+Use the full width attribute to stretch a button to fill its parent's width.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  button.button([attribute.class("max-w-sm"), button.full_width()], [
+    html.text("Full Width"),
+  ])
+}
+```
+
+## As a Link
+
+Render an anchor styled as a button for navigation rather than actions.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    button.link([attribute.href("/get-started")], [html.text("Get Started")]),
+    button.link([button.outline(), attribute.href("/docs")], [
+      html.text("View Docs"),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Constructors
+
+Four constructors, each one produces a different button behavior.
+
+| Constructor | Description |
+| --- | --- |
+| `button.button(attrs, children)` | Runs an action without submitting a form; renders type="button". |
+| `button.submit(attrs, children)` | Submits its enclosing form; renders type="submit". |
+| `button.reset(attrs, children)` | Resets its enclosing form's fields; renders type="reset". |
+| `button.link(attrs, children)` | An anchor styled as a button, for navigation rather than actions. |
+
+### Variants
+
+Sets the button's visual emphasis and intent.
+
+| Variant | Description |
+| --- | --- |
+| `button.primary()` | The default high-contrast fill for the primary action, usually one per page or form. |
+| `button.secondary()` | Lower-emphasis fill for supporting actions beside a primary. |
+| `button.accent()` | Brand-aligned fill for feature actions and high-visibility CTAs. |
+| `button.outline()` | Bordered and transparent, for low-emphasis actions that still need a visible affordance. |
+| `button.ghost()` | Borderless and transparent, for the lowest-emphasis actions and toolbar controls. |
+| `button.destructive()` | Filled, for irreversible or dangerous actions like delete or revoke. |
+
+### Size Attributes
+
+Adjusts the button's height, padding, and font size.
+
+| Attribute | Description |
+| --- | --- |
+| `button.xs()` | Extra-small, for dense toolbars and inline controls. |
+| `button.sm()` | Small, a common choice for compact forms. |
+| `button.md()` | Medium, the default; matches a button with no size attribute. |
+| `button.lg()` | Large, for hero CTAs. |
+
+### Layout Attributes
+
+Changes the button's shape or width within its container.
+
+| Attribute | Description |
+| --- | --- |
+| `button.icon_only()` | Renders a square button sized for a single icon child. |
+| `button.full_width()` | Stretches the button to fill its parent's width. |
+
+### State Attributes
+
+Signals the button's availability and any in-flight or error state.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.disabled(True)` | Blocks pointer events, reduces opacity, and removes the button from the tab order. |
+| `attribute.aria_disabled(True)` | Same visual treatment as disabled but keeps the button focusable so screen readers can still announce it. Suited to toolbars and async actions. |
+| `attribute.aria_busy(True)` | Centers a spinner child over the content, if passed. Pair with disabled to block interaction. |
+| `attribute.aria_invalid("true")` | Adds a destructive error ring when the button is the visible trigger for an invalid form control. |
+
+### Icon Slot Attributes
+
+Apply these to the **icon child element**, not the button itself.
+
+| Attribute | Description |
+| --- | --- |
+| `button.icon_start()` | Marks an icon as the leading (inline-start) child. The button reduces its leading padding. |
+| `button.icon_end()` | Marks an icon as the trailing (inline-end) child. The button reduces its trailing padding. |
+
+### Selectors
+
+CSS selectors stamped on the button's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="button"]` | The button or link element. |
+| `[data-variant="primary\|secondary\|..."]` | The element, tagged with its active variant. |
+| `[data-size="xs\|sm\|md\|lg"]` | The element, tagged with its active size. |
+| `[data-full-width="true"]` | A button stretched to fill its container. |
+| `[data-icon-only="true"]` | A square button sized for a single icon child. |
+| `[aria-busy="true"]` | A pending button. |
+| `[disabled]` | A disabled button, dropped from the tab order. |
+| `[aria-disabled="true"]` | An inactive button, kept focusable. |
+| `[aria-invalid="true"]` | A button flagged as an invalid form trigger. |
+| `[data-icon="inline-start\|inline-end"]` | A leading or trailing icon child. |
+| `[data-slot="spinner"]` | The spinner child centered over a pending button's label. |
+
+## Accessibility
+
+**Native button semantics.** Renders as a native `<button>` (or an `<a>` when built with `button.link`), so activation, focus, and the disabled state come from the browser. Setting aria-busy="true" on a pending button means assistive tech announces the busy state. Icon-only buttons have no text content, so give each one an accessible name with aria-label.
+
+### Keyboard
+
+| Key | Action |
+| --- | --- |
+| Tab | Move focus to the button. |
+| Shift + Tab | Move focus back to the previous focusable element. |
+| Enter | Activate the button, or follow the link when built with button.link. |
+| Space | Activate the button. Anchors built with button.link do not respond to Space. |
+

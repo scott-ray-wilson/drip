@@ -1,0 +1,47 @@
+@layer components {
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="checkbox"] {
+    @apply relative inline-flex shrink-0 items-center align-middle;
+  }
+
+  /* --- Input -------------------------------------------------------------- */
+  [data-slot="checkbox"] > input {
+    @apply m-0 size-4 shrink-0 cursor-pointer appearance-none
+           rounded-[min(var(--radius),4px)] border border-border bg-input
+           transition-[background-color,border-color,color,box-shadow]
+           duration-200 ease-out-soft;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+  [data-slot="checkbox"] > input:checked {
+    @apply border-primary bg-primary;
+  }
+  [data-slot="checkbox"] > input:focus-visible {
+    @apply outline-2 outline-offset-0 border-outline!;
+  }
+  [data-slot="checkbox"] > input:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+  [data-slot="checkbox"] > input[aria-invalid="true"] {
+    @apply border-error ring-error/40 ring-2;
+  }
+  [data-slot="checkbox"] > input[aria-invalid="true"]:checked {
+    @apply border-error;
+  }
+  /* Invalid + focused: drop the ring (it tints the translucent focus
+     outline); the error border keeps the state visible. */
+  [data-slot="checkbox"] > input[aria-invalid="true"]:focus-visible {
+    @apply ring-0 border-error!;
+  }
+
+  /* --- Indicator (Check) -------------------------------------------------- */
+  [data-slot="checkbox-indicator"] {
+    @apply pointer-events-none absolute top-1/2 left-1/2 size-3.5
+           -translate-x-1/2 -translate-y-1/2 text-primary-foreground
+           opacity-0 transition-opacity duration-200 ease-out-soft;
+  }
+  [data-slot="checkbox"]:has(> input:checked)
+    > [data-slot="checkbox-indicator"] {
+    @apply opacity-100;
+  }
+}

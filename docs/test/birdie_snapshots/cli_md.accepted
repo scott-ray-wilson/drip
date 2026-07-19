@@ -1,0 +1,109 @@
+---
+version: 2.0.1
+title: cli.md
+---
+# CLI
+
+Commands that vendor elements into your project and keep the
+stylesheet wired. No watcher, no lockfile, no magic. The CLI writes files you
+can read, then gets out of the way.
+
+## Invocation
+
+Adding Drip as a dev dependency brings the CLI with it, so there is nothing extra to install. Every command runs through `gleam` and takes the form `gleam run -m drip -- <command>`. For example:
+
+```sh
+gleam run -m drip -- add button
+```
+
+## Commands
+
+init sets up a project, add brings elements in, list shows what is vendored, and remove takes them out.
+
+### init
+
+Prepares a project for vendoring. It writes three files:
+
+- `src/ui/theme.css` holds the design tokens, every CSS variable the elements draw from.
+- `src/ui/index.css` imports the theme and every element stylesheet. add and remove regenerate this file from the elements on disk, never your entry.
+- `src/<app>.css` is your entry stylesheet, named after your package. It pulls in Tailwind and the index, then stays put.
+
+```sh
+gleam run -m drip -- init
+```
+
+init takes three flags.
+
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--prefix=<name>` | ui | Directory under src that elements vendor into, recorded in gleam.toml. |
+| `--source=<url-or-path>` | latest release | Registry to vendor from, a URL or local path, recorded in gleam.toml. |
+| `--force` | off | Overwrites an existing theme and index. |
+
+Without `--force`, init refuses to overwrite an existing theme or index. An entry stylesheet that already exists is edited in place, so adopting Drip in a real app never overwrites your styles.
+
+### add
+
+Vendors each element into `src/ui`: the module and its stylesheet. The index is regenerated to import them. Dependencies resolve automatically, so `add field` also vendors separator.
+
+```sh
+gleam run -m drip -- add button
+
+# several at once
+gleam run -m drip -- add card table radio_group
+```
+
+add takes one flag.
+
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--force` | off | Re-vendors the named elements and their dependencies, overwriting copies already on disk. |
+
+By default, elements already on disk are skipped, so your edits are safe from accidental overwrites. Pass `--force` to override this behavior and re-vendor the element and everything it pulls in, dependencies included, overwriting the copies on disk. That is how you take updates; do it on a branch and review the result with `git diff`.
+
+### list
+
+Prints every element the registry offers and marks the ones already vendored, based on which element modules exist on disk. Takes no arguments.
+
+```sh
+gleam run -m drip -- list
+```
+
+### remove
+
+Deletes the element's module and stylesheet, then regenerates the index without it.
+
+```sh
+gleam run -m drip -- remove button
+```
+
+Removal never cascades: only the elements you name are deleted, since a dependency may still be shared by others on disk. Removing `field` leaves separator in place; drop it too with `gleam run -m drip -- remove field separator` once nothing else needs it.
+
+## Configuration
+
+Drip has two settings, prefix and source. Both live in your `gleam.toml`, in the `[tools.drip]` table. init writes them when you pass the matching flags, adding them by hand works just as well, and most projects need neither.
+
+### prefix
+
+The directory under src that elements vendor into. It defaults to `ui`:
+
+```toml
+[tools.drip]
+prefix = "ui"
+```
+
+Set it before your first add, since the CLI does not migrate files you have already vendored.
+
+### source
+
+Where the index and element files are fetched from. It takes an alternate http(s) base or a local directory in the same flat layout, such as a registry checkout's `dist/`. With no source set, Drip uses its latest GitHub release; override it for offline work, forks, and mirrors:
+
+```toml
+[tools.drip]
+source = "https://example.com/registry"
+```
+
+## Next Steps
+
+New to Drip? The getting started guide walks through the whole flow once, and the introduction covers the what and why. Otherwise the catalog is where you'll find what to add.
+

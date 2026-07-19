@@ -1,0 +1,291 @@
+@layer components {
+  /* --- Root Wrapper ------------------------------------------------------- */
+  /* `display: contents` keeps the wrapper a DOM node (so the FFI can climb
+     from the trigger to its sibling dialog via `closest(...)`) without
+     contributing a layout box of its own. */
+  [data-slot="alert-dialog-root"] {
+    display: contents;
+  }
+
+  /* Lock document scroll while an alert dialog is open. `<dialog>` with
+     `showModal()` traps focus and intercepts pointer events via its
+     backdrop, but does NOT prevent wheel / touch scroll on the document
+     beneath: the page still scrolls through the backdrop. The `:has()`
+     selector matches whenever any descendant `[data-slot="alert-dialog"]`
+     has the `open` attribute set.
+
+     `overflow: hidden` lives on `body` (not `html`) on purpose: body's
+     overflow propagates up to the viewport for scroll-locking purposes,
+     but leaves `html` as the scroll container that `position: sticky`
+     descendants (e.g. a sticky sidebar) anchor to. Putting it on `html`
+     stops sticky elements from finding a scroll context and they fall
+     back to their in-flow position, i.e. the sidebar visibly jumps to
+     the top of the document.
+
+     `scrollbar-gutter: stable` reserves the gutter the scrollbar was
+     occupying so that hiding the scrollbar (via `overflow: hidden`) does
+     not collapse it; without this, the page content widens by the
+     scrollbar's width the moment the dialog opens, producing a visible
+     layout shift. */
+  html:has([data-slot="alert-dialog"][open]) {
+    scrollbar-gutter: stable;
+  }
+  body:has([data-slot="alert-dialog"][open]) {
+    overflow: hidden;
+  }
+
+  /* --- Dialog ------------------------------------------------------------- */
+  /* Editorial surface: generous padding gives the headline + eyebrow room
+     to breathe; border + backdrop blur carry the "above the page" weight
+     so no shadow or ring is needed. */
+  [data-slot="alert-dialog"] {
+    @apply m-auto grid w-full max-w-xs gap-3 rounded-2xl border bg-elevated
+    backdrop-blur-sm border-border p-5 text-card-foreground outline-none;
+
+    /* Entrance/exit animation. `<dialog>` toggles its display property to
+       open/close, which would normally skip transitions; adding `display`
+       and `overlay` to the transition list with `allow-discrete` lets the
+       browser animate around those discrete switches. `@starting-style`
+       defines the from-state for the open transition. */
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+    transition:
+      opacity 180ms var(--ease-out-soft),
+      transform 180ms var(--ease-out-soft),
+      display 180ms allow-discrete,
+      overlay 180ms allow-discrete;
+  }
+  [data-slot="alert-dialog"][open] {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  /* The base rule's `@apply grid` overrides the UA's `dialog { display: none }`;
+     without this, the closed dialog stays in the layout with `opacity: 0`
+     and blocks pointer events on whatever sits beneath it. The
+     `display 180ms allow-discrete` in the transition above keeps the dialog
+     visible during the exit animation despite this `none`. */
+  [data-slot="alert-dialog"]:not([open]) {
+    display: none;
+  }
+  @starting-style {
+    [data-slot="alert-dialog"][open] {
+      opacity: 0;
+      transform: scale(0.96) translateY(4px);
+    }
+  }
+
+  /* Backdrop animates in alongside the dialog, and out on close: the base
+     (resting) state is transparent, so opening fades to the dim value and
+     closing fades back to clear. */
+  [data-slot="alert-dialog"]::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+    transition:
+      background-color 180ms var(--ease-out-soft),
+      backdrop-filter 180ms var(--ease-out-soft),
+      display 180ms allow-discrete,
+      overlay 180ms allow-discrete;
+  }
+  [data-slot="alert-dialog"][open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  @supports (backdrop-filter: blur(0)) {
+    [data-slot="alert-dialog"][open]::backdrop {
+      backdrop-filter: blur(4px);
+    }
+  }
+  @starting-style {
+    [data-slot="alert-dialog"][open]::backdrop {
+      background-color: rgba(0, 0, 0, 0);
+      backdrop-filter: blur(0);
+    }
+  }
+
+  /* Default size grows on >= sm; compact size stays max-w-xs. */
+  @media (min-width: 640px) {
+    [data-slot="alert-dialog"][data-size="default"] {
+      @apply max-w-md;
+    }
+  }
+
+  /* --- Header ------------------------------------------------------------- */
+  /* No-media: auto-flow grid with each row stacked and centered on mobile,
+     left-aligned on sm+ for the default size. */
+  [data-slot="alert-dialog-header"] {
+    @apply grid place-items-center gap-2 text-center;
+  }
+  /* With media: 2-column grid where the eyebrow sits full-width above the
+     icon + title row, and the description indents in col 2 under the title
+     (the familiar alert content-column pattern). Forces left alignment at
+     every viewport: the icon-beside-text idiom doesn't read centered. */
+  [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"]) {
+    grid-template-columns: auto 1fr;
+    @apply text-left gap-x-3.5 gap-y-2;
+    place-items: center start;
+  }
+  /* Default: non-media children flow into col 2. With auto-flow row,
+     eyebrow lands at row 1 col 2, title at row 2 col 2, description at
+     row 3 col 2, until description's override below kicks in. */
+  [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"])
+    > :not([data-slot="alert-dialog-media"]) {
+    grid-column: 2;
+  }
+  /* Description spans full width below the icon + eyebrow + title cluster,
+     so the body copy reads at the dialog's full reading measure rather
+     than as a column indented under the title. */
+  [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"])
+    > [data-slot="alert-dialog-description"] {
+    grid-column: 1 / -1;
+  }
+  /* When an eyebrow is present, media spans the eyebrow + title rows so
+     its 36px height balances against the stacked text on the right.
+     `align-self: center` keeps it visually centered with the pair. */
+  [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"]):has(
+      [data-slot="alert-dialog-eyebrow"]
+    )
+    > [data-slot="alert-dialog-media"] {
+    grid-row: span 2;
+    align-self: center;
+  }
+  /* Tighten the eyebrow to title gap so the eyebrow reads as part of the
+     headline rather than as a standalone line. */
+  [data-slot="alert-dialog-eyebrow"] + [data-slot="alert-dialog-title"] {
+    @apply -mt-1;
+  }
+  /* On sm+ with the default size, left-align, but only for the no-media
+     header. The media-case rule above already sets `place-items: center
+     start` to vertically center the title with the icon, and that must
+     not be stomped by this override. */
+  @media (min-width: 640px) {
+    [data-slot="alert-dialog"][data-size="default"]
+      [data-slot="alert-dialog-header"]:not(
+        :has([data-slot="alert-dialog-media"])
+      ) {
+      @apply place-items-start text-left;
+    }
+  }
+
+  /* In the `compact` variant, revert the icon-beside-title layout to a
+     centered single-column stack: icon above the title, everything
+     centered. The default size's editorial icon-left layout reads as
+     overkill at this size; iOS-style "Allow accessory to connect?" prompts
+     are the design target. */
+  [data-slot="alert-dialog"][data-size="compact"]
+    [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"]) {
+    grid-template-columns: 1fr;
+    @apply place-items-center gap-2 text-center;
+  }
+  [data-slot="alert-dialog"][data-size="compact"]
+    [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"])
+    > :not([data-slot="alert-dialog-media"]) {
+    grid-column: auto;
+  }
+  [data-slot="alert-dialog"][data-size="compact"]
+    [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"])
+    > [data-slot="alert-dialog-description"] {
+    grid-column: auto;
+  }
+  /* Reset the eyebrow-driven row-span on media; that rule exists to
+     balance the default size's icon-beside-text layout. In `compact`'s
+     single-column stack the span would leave an empty row between the
+     icon and the eyebrow. */
+  [data-slot="alert-dialog"][data-size="compact"]
+    [data-slot="alert-dialog-header"]:has([data-slot="alert-dialog-media"])
+    > [data-slot="alert-dialog-media"] {
+    grid-row: auto;
+    align-self: auto;
+  }
+
+  /* --- Footer ------------------------------------------------------------- */
+  /* Hairline rule above the actions: separates the editorial body from the
+     CTAs the way a magazine article separates copy from credits. The rule
+     spans the content area inside the dialog's padding; full-bleed would
+     read as a tray and undo the flat surface. */
+  [data-slot="alert-dialog-footer"] {
+    @apply flex flex-col-reverse gap-2 border-t border-border pt-4 mt-1;
+  }
+  [data-slot="alert-dialog"][data-size="compact"]
+    [data-slot="alert-dialog-footer"] {
+    @apply grid grid-cols-2;
+  }
+  /* In the compact 2-col footer, stretch button children to fill the cell
+     so the action/cancel pair reads as a balanced split. */
+  [data-slot="alert-dialog"][data-size="compact"]
+    [data-slot="alert-dialog-footer"]
+    > [data-slot="button"] {
+    @apply w-full;
+  }
+  @media (min-width: 640px) {
+    [data-slot="alert-dialog-footer"] {
+      @apply flex-row justify-end;
+    }
+  }
+
+  /* --- Media -------------------------------------------------------------- */
+  /* Mirrors `alert-icon`: rounded-sm square with a hairline border. Sits in
+     col 1 of the header grid when present, anchored to the top alongside
+     the eyebrow / title in col 2. */
+  [data-slot="alert-dialog-media"] {
+    @apply inline-flex size-9 items-center justify-center rounded-sm
+           border border-border bg-muted/40 text-foreground;
+  }
+  [data-slot="alert-dialog-media"] > svg:not([class*="size-"]) {
+    @apply size-4.5 shrink-0;
+  }
+
+  /* --- Eyebrow ------------------------------------------------------------ */
+  /* Mirrors `typography.eyebrow`'s 11px uppercase tracked label, defaulted
+     to the brand accent. Override per call site with `attribute.class(...)`
+     for context-specific tints (e.g. `text-destructive` above a delete
+     prompt). Decorative: `aria-hidden` on the element keeps it out of the
+     accessible name. */
+  [data-slot="alert-dialog-eyebrow"] {
+    @apply inline-flex font-sans text-[11px] tracking-[0.1em] uppercase
+           font-medium text-muted-foreground m-0;
+  }
+
+  /* --- Title -------------------------------------------------------------- */
+  /* Display-scale headline, bigger than `alert-title` because this is the
+     "moment of attention" in the editorial layout. Dialed back to a tighter
+     `text-base` in the `compact` variant below so short prompts don't
+     feel overweight. */
+  [data-slot="alert-dialog-title"] {
+    @apply font-display font-bold text-xl leading-[24px] text-foreground
+           tracking-tight m-0;
+  }
+  [data-slot="alert-dialog"][data-size="compact"]
+    [data-slot="alert-dialog-title"] {
+    @apply text-base leading-[20px];
+  }
+
+  /* --- Description -------------------------------------------------------- */
+  /* Matches `alert-description` for cross-element consistency. */
+  [data-slot="alert-dialog-description"] {
+    @apply font-sans text-[13px] leading-[19px] text-muted-foreground
+           text-balance m-0;
+  }
+  @media (min-width: 768px) {
+    [data-slot="alert-dialog-description"] {
+      @apply text-pretty;
+    }
+  }
+  [data-slot="alert-dialog-description"] > a {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="alert-dialog-description"] > a:hover {
+    @apply text-foreground;
+  }
+  [data-slot="alert-dialog-description"] > a:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+
+  /* --- Reduced Motion ----------------------------------------------------- */
+  /* Respect a reduced-motion preference: drop the scale/translate/opacity
+     and backdrop transitions so the dialog and its dim appear at once
+     instead of animating in. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="alert-dialog"],
+    [data-slot="alert-dialog"]::backdrop {
+      transition: none;
+    }
+  }
+}

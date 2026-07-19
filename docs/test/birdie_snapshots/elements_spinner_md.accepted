@@ -1,0 +1,146 @@
+---
+version: 2.0.1
+title: elements/spinner.md
+---
+# Spinner
+
+An indeterminate loading indicator for pending states.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import ui/spinner
+
+pub fn view() -> Element(message) {
+  spinner.icon([attribute.class("size-5 text-muted-foreground")])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add spinner
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import ui/spinner
+
+pub fn view() -> Element(message) {
+  spinner.icon([])
+}
+```
+
+## Examples
+
+Size the spinner with utility classes or compose it into other components to signal pending work.
+
+### Sizes
+
+Override the default size with any size utility.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import ui/spinner
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    spinner.icon([attribute.class("size-3")]),
+    spinner.icon([attribute.class("size-5")]),
+    spinner.icon([attribute.class("size-7")]),
+    spinner.icon([attribute.class("size-9")]),
+  ])
+}
+```
+
+### Label
+
+Pair the spinner with a short text label when the wait needs context.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/spinner
+
+pub fn view() -> Element(message) {
+  html.div(
+    [
+      attribute.class(
+        "inline-flex items-center gap-2 text-sm text-muted-foreground",
+      ),
+    ],
+    [spinner.icon([]), html.text("Loading…")],
+  )
+}
+```
+
+### Button
+
+Add a spinner as a button child and set aria-busy to reveal it. Pair with disabled to block interaction.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/spinner
+
+pub fn view() -> Element(message) {
+  button.button([attribute.aria_busy(True), attribute.disabled(True)], [
+    spinner.icon([]),
+    html.text("Saving"),
+  ])
+}
+```
+
+### Empty
+
+Fill an empty state's icon slot with the spinner to mark a whole surface as loading.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/empty
+import ui/spinner
+
+pub fn view() -> Element(message) {
+  empty.root([], [
+    empty.header([], [
+      empty.icon([], [spinner.icon([])]),
+      empty.title([], [html.text("Processing your request")]),
+      empty.description([], [
+        html.text("Please wait while we sync your workspace."),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+One element, no children. Adjust size, color, and positioning with utility classes.
+
+| Element | Description |
+| --- | --- |
+| `spinner.icon(attrs)` | The spinning loader icon. |
+
+### Selectors
+
+CSS selectors stamped on the spinner's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="spinner"]` | The spinner root. |
+
+## Accessibility
+
+**Decorative by default.** Renders as an aria-hidden icon, a purely visual cue that screen readers skip. Wrapping the spinner and a short text label in a container with role="status" announces the wait politely, once, when the region appears. The spin honors prefers-reduced-motion, slowing to one rotation every six seconds.
+

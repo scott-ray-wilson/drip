@@ -1,0 +1,321 @@
+---
+version: 2.0.1
+title: theming.md
+---
+# Theming
+
+Every element draws its colors, corners, and type from one set of
+design tokens: CSS variables you own. Change a value and every element follows,
+in light and dark.
+
+> **Preview Release.** Token names and structure are still settling and may change before 1.0. Pin the theme you ship on, and expect to reconcile tokens when you take element updates.
+
+## How It Works
+
+Every color and radius in Drip routes through `src/ui/theme.css`, the token file init writes. It is the one file you edit to reskin every element.
+
+Each token is declared twice and mapped once:
+
+```css
+@theme inline {
+  --color-background: var(--background);
+}
+
+:root {
+  --background: oklch(0.99 0.007 257);
+}
+
+.dark {
+  --background: oklch(0.155 0.0208 257);
+}
+```
+
+The `:root` block holds the light value, the `.dark` block the dark value, and the `@theme inline` block hands the variable to Tailwind, so elements reach it as an ordinary utility: `bg-background`, `text-muted-foreground`, `border-border`. Because the mapping is `inline`, those utilities compile to a live `var()` reference rather than a frozen value: one stylesheet serves both palettes, and editing a token reskins the page without a rebuild.
+
+Color tokens come in pairs named by role: a surface and the text that sits on it. `card` is the card background, `card-foreground` the text on it. Change one and check its partner still reads.
+
+## Tokens
+
+Every token the `:root` block declares, grouped by role:
+
+| Token | Description |
+| --- | --- |
+| `background` `foreground` | The page surface and its default text. |
+| `foreground-subtle` | Quieter supporting text: captions, hints, markers. |
+| `card` `card-foreground` | Card surfaces and the text on them. |
+| `elevated` `elevated-foreground` | Floating surfaces layered above the page. |
+| `muted` `muted-foreground` | Tinted fills and secondary text. |
+| `input` | Form control backgrounds. |
+| `border` `border-strong` | Hairline borders, with a heavier step for emphasis. |
+| `outline` | The focus outline every element shares. Follows the accent until you set a color of its own. |
+| `primary` `primary-foreground` | The solid call-to-action fill and its text. |
+| `secondary` `secondary-foreground` | The quieter companion fill for secondary actions. |
+| `accent` `accent-foreground` | The brand color and its text. |
+| `destructive` `destructive-foreground` | Dangerous actions and their text. |
+| `primary-hover` `secondary-hover` `accent-hover` `accent-border` `accent-light` `destructive-hover` `destructive-border` | Shades mixed from the actions above; repaint a base and they follow. |
+| `info` `success` `warning` `error` | Status colors for alerts and form validation. |
+| `radius` | The base corner radius the whole scale derives from. |
+| `scrollbar-thumb` `scrollbar-track` `scrollbar-width` `scrollbar-radius` | The thin-scrollbar treatment scrolling elements share. |
+
+The derived shades are mixed from their base token with `color-mix()`: repaint the base and the whole family moves with it. They are not mapped to utilities; elements reach them directly with `var()`.
+
+Alongside the color mappings, the `@theme inline` block extends Tailwind directly: `--ease-out-soft`, the easing curve element motion shares; `--text-2xs`, a type step below `text-xs` for micro-labels; and the radius scale, which gets its own section below.
+
+## Dark Mode
+
+Both palettes live in one file: the `.dark` block re-declares each color for dark surfaces, and a `@custom-variant` scopes Tailwind's `dark:` variant to that class. Add `dark` to the document root and every element re-resolves; remove it and the light values return.
+
+How the class gets there is up to you: this site toggles it from the header button and stores the choice in `localStorage`. The variant follows the class rather than the OS, so honoring the system setting means adding the class from a `prefers-color-scheme` listener.
+
+## Customize
+
+The theme is vendored source, so restyling is an edit, not an override: open the file and write new values. Repaint the accent and soften the corners:
+
+```css
+:root {
+  --radius: 0.75rem;
+
+  --accent: oklch(0.55 0.18 260);
+  --accent-foreground: oklch(0.99 0.005 260);
+}
+
+.dark {
+  --accent: oklch(0.78 0.14 260);
+  --accent-foreground: oklch(0.17 0.03 260);
+}
+```
+
+Repainting the accent moves more than fills: the focus outline and its derived shades follow. Set a color in both blocks when the palettes differ; `.dark` only overrides what it declares, which is why `radius` is set once and shared.
+
+New tokens slot in the same way: declare a variable in `:root` and `.dark`, map it under `@theme inline` as `--color-<name>`, and Tailwind mints the matching utilities: `bg-<name>`, `text-<name>`, and the rest.
+
+## Radius
+
+Corners hang off the single `radius` token. The theme multiplies it into a scale, `--radius-xs` at 0.4× up through `--radius-4xl` at 2.6×, and each element picks its step from that scale, so proportions hold at any base. The default `0.16rem` keeps corners barely softened; raise it for a rounder feel, or set it to `0` for sharp edges everywhere.
+
+## Fonts
+
+Elements never name a typeface. They set type with Tailwind's `font-sans` and `font-mono` utilities, so the faces come from Tailwind's own font tokens. Point those at your fonts from the entry stylesheet:
+
+```css
+@import "tailwindcss";
+@import "./ui/index.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, monospace;
+}
+```
+
+Loading the font files is still your job: a `<link>` tag in your HTML or an `@font-face` block in the entry stylesheet, whichever fits how you ship.
+
+## Default Theme
+
+Past the token pairs, the file also carries the `@layer base` defaults and the `.thin-scrollbar` utility scrolling elements share. The whole theme, exactly as init writes it to `src/ui/theme.css`:
+
+```css
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Surfaces */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-elevated: var(--elevated);
+  --color-elevated-foreground: var(--elevated-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-input: var(--input);
+
+  /* Borders and focus */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-outline: var(--outline);
+
+  /* Actions */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  /* Status */
+  --color-info: var(--info);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  /* Motion, type, radius */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --text-2xs: 0.6875rem;
+
+  --radius-xs: calc(var(--radius) * 0.4);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --radius: 0.16rem;
+
+  /* Surfaces */
+  --background: oklch(0.99 0.007 257);
+  --foreground: oklch(0.21 0.034 257);
+  --foreground-subtle: oklch(0.55 0.028 257);
+  --card: oklch(0.998 0.003 257);
+  --card-foreground: oklch(0.21 0.034 257);
+  --elevated: oklch(0.998 0.003 257);
+  --elevated-foreground: oklch(0.21 0.034 257);
+  --muted: oklch(0.957 0.013 257);
+  --muted-foreground: oklch(0.505 0.03 257);
+  --input: oklch(0.998 0.003 257);
+
+  /* Borders and focus. Focus follows the accent in both modes; set a color
+     here to decouple them. */
+  --border: oklch(0.91 0.016 257);
+  --border-strong: oklch(0.855 0.022 257);
+  --outline: var(--accent);
+
+  /* Actions */
+  --primary: oklch(0.23 0.034 257);
+  --primary-foreground: oklch(0.99 0.007 257);
+  --secondary: oklch(0.946 0.015 257);
+  --secondary-foreground: oklch(0.23 0.034 257);
+  --accent: oklch(0.525 0.199 4);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.469 0.185 11.1);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Status */
+  --info: oklch(0.513 0.121 247.4);
+  --success: oklch(0.528 0.124 147.2);
+  --warning: oklch(0.594 0.126 62.9);
+  --error: oklch(0.585 0.192 25.4);
+
+  /* Derived shades: mixed from the actions above, reached with var() rather
+     than utilities. Repaint the base tokens; these follow. */
+  --primary-hover: color-mix(in oklab, var(--primary), var(--background) 11.8%);
+  --secondary-hover: color-mix(
+    in oklab,
+    var(--secondary),
+    var(--foreground) 4.5%
+  );
+  --accent-hover: color-mix(in oklab, var(--accent), var(--foreground) 7.5%);
+  --accent-border: color-mix(in oklab, var(--accent), var(--foreground) 7.5%);
+  --accent-light: color-mix(in oklab, var(--accent), var(--background) 5%);
+  --destructive-hover: color-mix(
+    in oklab,
+    var(--destructive),
+    var(--foreground) 10%
+  );
+  --destructive-border: color-mix(
+    in oklab,
+    var(--destructive),
+    var(--foreground) 10%
+  );
+
+  /* Scrollbar */
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.05);
+  --scrollbar-width: 20px;
+  --scrollbar-radius: 0px;
+}
+
+.dark {
+  /* Surfaces */
+  --background: oklch(0.155 0.0208 257);
+  --foreground: oklch(0.97 0.0078 257);
+  --foreground-subtle: oklch(0.58 0.0208 257);
+  --card: oklch(0.188 0.0234 257);
+  --card-foreground: oklch(0.97 0.0078 257);
+  --elevated: oklch(0.188 0.0234 257);
+  --elevated-foreground: oklch(0.97 0.0078 257);
+  --muted: oklch(0.2405 0.026 257);
+  --muted-foreground: oklch(0.72 0.0182 257);
+  --input: oklch(0.205 0.0234 257);
+
+  /* Borders and focus (focus inherits the accent link from :root) */
+  --border: oklch(0.255 0.0234 257);
+  --border-strong: oklch(0.325 0.0234 257);
+
+  /* Actions */
+  --primary: oklch(0.97 0.0078 257);
+  --primary-foreground: oklch(0.155 0.0208 257);
+  --secondary: oklch(0.226 0.026 257);
+  --secondary-foreground: oklch(0.97 0.0078 257);
+  --accent: oklch(0.851 0.127 332);
+  --accent-foreground: oklch(0.225 0.0252 286.1);
+  --destructive: oklch(0.513 0.189 10.3);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Status */
+  --info: oklch(0.887 0.081 220);
+  --success: oklch(0.942 0.127 134.3);
+  --warning: oklch(0.895 0.093 77.3);
+  --error: oklch(0.699 0.192 23.5);
+
+  /* Derived shades */
+  --primary-hover: color-mix(in oklab, var(--primary), var(--background) 8.6%);
+  --secondary-hover: color-mix(
+    in oklab,
+    var(--secondary),
+    var(--foreground) 10%
+  );
+  --accent-hover: color-mix(in oklab, var(--accent), var(--foreground) 20%);
+  --accent-border: color-mix(in oklab, var(--accent), var(--foreground) 15%);
+  --accent-light: color-mix(in oklab, var(--accent), var(--foreground) 45%);
+  --destructive-hover: color-mix(
+    in oklab,
+    var(--destructive),
+    var(--background) 7.5%
+  );
+  --destructive-border: color-mix(
+    in oklab,
+    var(--destructive),
+    var(--foreground) 5%
+  );
+
+  /* Scrollbar */
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  * {
+    @apply outline-outline/40;
+  }
+}
+
+/* Thin, subtle scrollbar utility for any scrollable surface. Library elements
+   that scroll carry the same treatment in their own CSS, keyed off data-slot. */
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+.thin-scrollbar::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-radius);
+}
+
+```
+

@@ -1,0 +1,152 @@
+@layer components {
+  /* --- Set (Fieldset) ----------------------------------------------------- */
+  [data-slot="field-set"] {
+    @apply flex flex-col gap-4
+           has-[>[data-slot=radio-group]]:gap-3;
+  }
+
+  /* --- Legend ------------------------------------------------------------- */
+  [data-slot="field-legend"] {
+    @apply mb-1.5 font-medium;
+  }
+  [data-slot="field-legend"][data-variant="label"] {
+    @apply text-sm;
+  }
+  [data-slot="field-legend"][data-variant="legend"] {
+    @apply text-base;
+  }
+
+  /* --- Group -------------------------------------------------------------- */
+  [data-slot="field-group"] {
+    @apply flex w-full flex-col gap-5
+           *:data-[slot=field-group]:gap-4;
+    /* Names the container so responsive fields can query the group's width. */
+    container-type: inline-size;
+    container-name: field-group;
+  }
+
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="field"] {
+    @apply flex w-full gap-1.5;
+  }
+
+  /* --- Vertical (Default Orientation) ------------------------------------- */
+  [data-slot="field"]:not([data-orientation]),
+  [data-slot="field"][data-orientation="vertical"] {
+    @apply flex-col *:w-full [&>.sr-only]:w-auto;
+  }
+
+  /* --- Horizontal (Orientation) ------------------------------------------- */
+  [data-slot="field"][data-orientation="horizontal"] {
+    @apply flex-row items-center gap-2
+           has-[>[data-slot=field-content]]:items-start
+           *:data-[slot=field-label]:flex-auto;
+  }
+
+  /* --- Responsive (Orientation) ------------------------------------------- */
+  [data-slot="field"][data-orientation="responsive"] {
+    @apply flex-col *:w-full [&>.sr-only]:w-auto;
+  }
+  @container field-group (min-width: 28rem) {
+    [data-slot="field"][data-orientation="responsive"] {
+      @apply flex-row items-center gap-2 *:w-auto;
+    }
+    [data-slot="field"][data-orientation="responsive"]:has(
+        > [data-slot="field-content"]
+      ) {
+      @apply items-start;
+    }
+    [data-slot="field"][data-orientation="responsive"]
+      > [data-slot="field-label"] {
+      @apply flex-auto;
+    }
+  }
+
+  /* --- Content ------------------------------------------------------------ */
+  [data-slot="field-content"] {
+    @apply flex flex-1 flex-col gap-0.5 leading-snug;
+  }
+
+  /* --- Label -------------------------------------------------------------- */
+  [data-slot="field-label"] {
+    @apply flex w-fit items-center gap-1
+           font-sans text-2xs tracking-[0.08em] uppercase font-medium
+           text-muted-foreground;
+  }
+  /* A label bound to a control (via for) or wrapping one activates it on
+     click. title() renders a div and is excluded. */
+  label[data-slot="field-label"][for],
+  label[data-slot="field-label"]:has(input, select, textarea) {
+    @apply cursor-pointer;
+  }
+  [data-slot="field"]:has(:disabled) [data-slot="field-label"] {
+    @apply opacity-50;
+  }
+  /* A disabled control can't be activated, so its label isn't clickable. */
+  [data-slot="field"]:has(:disabled) label[data-slot="field-label"],
+  label[data-slot="field-label"]:has(:disabled) {
+    @apply cursor-not-allowed;
+  }
+
+  /* --- Required Indicator ------------------------------------------------- */
+  /* Hidden by default; shown when the surrounding field has a [required]
+     descendant. */
+  [data-slot="field-required"] {
+    @apply hidden font-semibold text-accent;
+  }
+  [data-slot="field"]:has([required]) [data-slot="field-required"] {
+    @apply inline;
+  }
+
+  /* --- Wrapping Label (Label Element) ------------------------------------- */
+  label[data-slot="field-label"] {
+    @apply leading-snug select-none
+           has-checked:border-border-strong
+           has-checked:bg-primary/2.5
+           has-[>[data-slot=field]]:rounded-md
+           has-[>[data-slot=field]]:border
+           has-[>[data-slot=field]]:border-border
+           has-[>[data-slot=field]]:w-full
+           has-[>[data-slot=field]]:flex-col
+           *:data-[slot=field]:p-2.5;
+  }
+
+  /* --- Description -------------------------------------------------------- */
+  [data-slot="field-description"] {
+    @apply text-left text-xs leading-normal font-normal text-foreground-subtle
+           normal-case;
+  }
+  [data-slot="field-description"] > a {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="field-description"] > a:hover {
+    @apply text-primary;
+  }
+  [data-slot="field-description"] > a:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+  [data-slot="field-description"]:last-child {
+    @apply mt-0;
+  }
+  [data-slot="field-description"]:nth-last-child(2) {
+    @apply -mt-1;
+  }
+  [data-slot="field-legend"][data-variant="legend"]
+    + [data-slot="field-description"] {
+    @apply -mt-1.5;
+  }
+  [data-slot="field"][data-orientation="horizontal"]
+    [data-slot="field-description"] {
+    @apply text-balance;
+  }
+
+  /* --- Separator (Field Variant) ------------------------------------------ */
+  [data-slot="separator"][data-variant="field"] {
+    @apply -my-2 h-5;
+  }
+
+  /* --- Error -------------------------------------------------------------- */
+  [data-slot="field-error"] {
+    @apply text-xs font-normal text-error;
+  }
+}

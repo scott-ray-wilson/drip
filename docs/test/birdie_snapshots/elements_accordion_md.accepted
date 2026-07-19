@@ -1,0 +1,596 @@
+---
+version: 2.0.1
+title: elements/accordion.md
+---
+# Accordion
+
+A set of interactive headings that reveal or hide a section of content.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([attribute.open(True)], [
+      accordion.trigger([], [html.h3([], [html.text("What is Drip?")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Drip is an element registry for Lustre: small Gleam
+            modules paired with per-element CSS.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("How do I install it?")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text("Run "),
+          html.span([attribute.class("font-medium")], [html.text("drip init")]),
+          html.text(" to scaffold the config and stylesheet, then "),
+          html.span([attribute.class("font-medium")], [
+            html.text("drip add <element>"),
+          ]),
+          html.text(" to pull in an element."),
+        ]),
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Alternatively, copy the code straight from the
+            docs into your project's src/ui/ folder.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [
+        html.h3([], [html.text("Can I customize an element?")]),
+      ]),
+      accordion.content([attribute.class("text-muted-foreground")], [
+        html.p([], [
+          html.text(
+            "Yes. Once an element is in your src/ui/ folder it's your code.
+            Edit the Gleam markup or tweak the CSS to fit your design.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add accordion
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost()], [
+    accordion.item([], [
+      accordion.trigger([], [html.text("Question")]),
+      accordion.content([], [html.text("Answer")]),
+    ]),
+  ])
+}
+```
+
+## Variants
+
+Three visual styles to cover anything from a quiet borderless list to a high-emphasis filled group.
+
+### Ghost
+
+Borderless rows separated by a hairline, quiet enough to drop into running prose.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([attribute.open(True)], [
+      accordion.trigger([], [html.h3([], [html.text("Materials")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "100% organic cotton, pre-shrunk and garment-dyed for a softer
+            hand and a lived-in feel.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("Care")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Machine wash cold with like colors. Tumble dry low or hang
+            to preserve the print.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("Shipping & returns")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Free standard shipping on orders over $50. Returns accepted
+            within 30 days, tags attached.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Outline
+
+Bordered rows collapsed into a single outlined group, no fill. Visible without competing with the page.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.outline(), attribute.class("w-96")], [
+    accordion.item([attribute.open(True)], [
+      accordion.trigger([], [html.h3([], [html.text("General")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Set your display name, language, and time zone. These appear
+            across the app and in any documents you share.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("Notifications")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Choose which events send you email or in-app alerts. Granular
+            per channel and per mentionable thread.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("Privacy & security")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Manage active sessions, enable two-factor auth, and review
+            recent account activity in the audit log.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Filled
+
+Bordered, filled rows collapsed into a single group. Solid enough to stand as a section of its own.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+import ui/icon
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.filled(), attribute.class("w-96")], [
+    accordion.item([attribute.open(True)], [
+      accordion.trigger([], [
+        icon.box([]),
+        html.h3([], [html.text("Starter")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Free for hobby projects. Up to three collaborators, 1 GB of
+            storage, and community support.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [
+        icon.zap([]),
+        html.h3([], [html.text("Pro")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "$12 per user per month. Unlimited collaborators, 100 GB of
+            storage, priority email support, and SSO.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [
+        icon.shield([]),
+        html.h3([], [html.text("Enterprise")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Custom pricing. Dedicated infrastructure, SAML/SCIM, 24/7
+            support, and signed SLAs.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+## Examples
+
+Configure the open state, grouping, and contents of individual items.
+
+### Default
+
+Each item expands and collapses independently by default.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([], [
+      accordion.trigger([], [
+        html.h3([], [html.text("Open multiple at once")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Click a heading to expand it. Sections open independently, so
+            you can keep two side by side while you read.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [
+        html.h3([], [html.text("Click again to collapse")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Selecting an open heading hides its content. The other sections
+            stay just the way you left them.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [
+        html.h3([], [html.text("Reach it from the keyboard")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Tab moves the focus between headings; Enter or Space toggles
+            the highlighted one.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Open
+
+Use the open attribute to render an item expanded on first paint.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([attribute.open(True)], [
+      accordion.trigger([], [html.h3([], [html.text("Open by default")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Pass the open attribute to render an item in its expanded
+            state on first paint.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("Closed by default")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Items default to closed when the open attribute is omitted.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Exclusive
+
+Use a shared name attribute to make opening one item close the others.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([attribute.name("faq"), attribute.open(True)], [
+      accordion.trigger([], [
+        html.h3([], [html.text("Only one open at a time")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Opening a heading closes whichever section was open before, so
+            there's only ever one in view.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([attribute.name("faq")], [
+      accordion.trigger([], [
+        html.h3([], [html.text("Switch between sections")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Pick a different heading and the previous one tucks itself
+            away, no need to close it first.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([attribute.name("faq")], [
+      accordion.trigger([], [
+        html.h3([], [html.text("Tidy for longer answers")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Showing one section at a time keeps the page scannable even
+            when each answer runs long.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Disabled
+
+Use the inert attribute to disable an item, blocking interaction and muting it visually.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("Available")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text("This row toggles normally."),
+        ]),
+      ]),
+    ]),
+    accordion.item([attribute.inert(True)], [
+      accordion.trigger([], [html.h3([], [html.text("Coming soon")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Mark an item with inert to dim it visually and remove it from
+            the focus order.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [html.h3([], [html.text("Also available")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text("Disabled items don't break the keyboard tab order."),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Rich Content
+
+Paragraphs and links inside an item get sensible default styling.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([attribute.open(True)], [
+      accordion.trigger([], [html.h3([], [html.text("Multi-paragraph body")])]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Content panels accept any markup and style paragraphs and links
+            for you.",
+          ),
+        ]),
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text("Read more in the "),
+          html.a([attribute.href("#")], [html.text("getting started")]),
+          html.text(" guide."),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Icon
+
+Place an icon before the label and the trigger styles it automatically.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/accordion
+import ui/icon
+
+pub fn view() -> Element(message) {
+  accordion.root([accordion.ghost(), attribute.class("w-96")], [
+    accordion.item([attribute.open(True)], [
+      accordion.trigger([], [
+        icon.user([]),
+        html.h3([], [html.text("Account")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Update your name, email, and the avatar shown next to your
+            comments.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [
+        icon.shield([]),
+        html.h3([], [html.text("Security")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Turn on two-factor authentication and review the devices signed
+            in to your account.",
+          ),
+        ]),
+      ]),
+    ]),
+    accordion.item([], [
+      accordion.trigger([], [
+        icon.layout_template([]),
+        html.h3([], [html.text("Workspace")]),
+      ]),
+      accordion.content([], [
+        html.p([attribute.class("text-muted-foreground")], [
+          html.text(
+            "Rename the workspace, set its default landing page, and manage
+            shared templates.",
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Variants
+
+Sets the accordion's visual style. Pass one into the root's attribute list.
+
+| Variant | Description |
+| --- | --- |
+| `accordion.ghost()` | The default borderless stack with hairline separators between rows. |
+| `accordion.outline()` | Bordered rows collapsed into a single outlined group, no fill. |
+| `accordion.filled()` | Bordered, filled rows collapsed into a single group. |
+
+### Elements
+
+The root container and the composition elements that nest inside it.
+
+| Element | Description |
+| --- | --- |
+| `accordion.root(attrs, children)` | The root container. Holds the items and carries the variant attribute. |
+| `accordion.item(attrs, children)` | A single collapsible row. |
+| `accordion.trigger(attrs, children)` | Clickable row header. Toggles its parent item open or closed. |
+| `accordion.content(attrs, children)` | Body of a row, revealed when its parent item is open. |
+
+### Attributes
+
+Standard Lustre attributes an accordion item responds to. Pass them through the attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.open(True)` | Defaults the item to its expanded state. |
+| `attribute.name("faq")` | Groups items into an exclusive set; opening one closes the others. |
+| `attribute.inert(True)` | Disables all interaction with the row and mutes it visually. |
+
+### Selectors
+
+CSS selectors stamped on the accordion's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="accordion"]` | The root container. |
+| `[data-variant="ghost\|outline\|filled"]` | The root, tagged with its active variant. |
+| `[data-slot="accordion-item"]` | Each row (the details element). |
+| `[data-slot="accordion-item"][open]` | An expanded row. |
+| `[data-slot="accordion-item"][inert]` | A muted, non-interactive row. |
+| `[data-slot="accordion-trigger"]` | The clickable row header (the summary element). |
+| `[data-slot="accordion-trigger-icon"]` | The chevron appended to the end of every trigger. |
+| `[data-slot="accordion-content"]` | The body revealed when its row is open. |
+
+## Accessibility
+
+**Keyboard & screen reader ready.** Each item renders as a native `<details>`/`<summary>` pair, so expanding, collapsing, and exclusive name grouping come from the browser rather than from script, and each trigger's expanded state is announced through the same built-in semantics. Inert items drop out of both the tab order and the accessibility tree.
+
+### Keyboard
+
+| Key | Action |
+| --- | --- |
+| Tab | Move focus to the next trigger (and any focusable content inside an open panel). |
+| Shift + Tab | Move focus to the previous trigger (and any focusable content inside an open panel). |
+| Enter | Toggle the focused item open or closed. |
+| Space | Toggle the focused item open or closed. |
+

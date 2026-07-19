@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Roll every action bump into one PR a week to keep the noise down.
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    # Match the repo's Conventional Commits convention (.githooks/commit-msg).
+    commit-message:
+      prefix: "ci"

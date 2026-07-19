@@ -1,0 +1,56 @@
+name: cli-release
+
+# CLI release: publish the `drip` Hex package (cli/) when a `cli-v*` tag is
+# pushed. It publishes to Hex ONLY and creates NO GitHub Release.
+# See PUBLISHING.md.
+on:
+  push:
+    tags:
+      - "cli-v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27"
+          gleam-version: "1.17.0"
+          # cli's test mock server (mist dev-dep) pulls in hpack_erl, built with
+          # rebar3; setup-beam only installs rebar3 when asked.
+          rebar3-version: "3"
+
+      # The tag is the version's source of truth for the release. Refuse to
+      # publish if it disagrees with cli/gleam.toml, so a mistagged push can't
+      # ship a wrong Hex version.
+      - name: Assert tag matches cli/gleam.toml version
+        run: |
+          case "$GITHUB_REF" in
+            refs/tags/cli-v*) ;;
+            *) echo "::error::cli-release must run from a cli-v* tag (got $GITHUB_REF)"; exit 1 ;;
+          esac
+          tag_version="${GITHUB_REF_NAME#cli-v}"
+          toml_version="$(sed -n -E 's/^version *= *"([^"]+)".*/\1/p' cli/gleam.toml | head -1)"
+          if [ "$tag_version" != "$toml_version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME implies $tag_version but cli/gleam.toml is $toml_version"
+            exit 1
+          fi
+          echo "publishing drip $toml_version"
+
+      # Gate the immutable publish on a green suite (mirrors the manual
+      # `gleam test` step PUBLISHING.md used to prescribe).
+      - run: gleam deps download
+        working-directory: cli
+      - run: gleam test
+        working-directory: cli
+
+      - name: Publish to Hex
+        working-directory: cli
+        env:
+          HEXPM_API_KEY: ${{ secrets.HEXPM_API_KEY }}
+        run: gleam publish --yes

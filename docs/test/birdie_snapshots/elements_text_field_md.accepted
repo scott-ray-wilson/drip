@@ -1,0 +1,212 @@
+---
+version: 2.0.1
+title: elements/text-field.md
+---
+# Text Field
+
+A single-line text input for short, free-form values.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    field.root([field.vertical(), attribute.class("w-54")], [
+      field.label([attribute.for("intro-email")], [html.text("Email")]),
+      text_field.input([
+        attribute.id("intro-email"),
+        attribute.type_("email"),
+        attribute.value("ada@glow.dev"),
+      ]),
+    ]),
+    field.root([field.vertical(), attribute.class("w-54")], [
+      field.label([attribute.for("intro-api-key")], [html.text("API Key")]),
+      text_field.input([
+        attribute.id("intro-api-key"),
+        attribute.type_("password"),
+        attribute.value("••••••••••••"),
+      ]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add text_field
+```
+
+## Usage
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical()], [
+    field.label([attribute.for("email")], [html.text("Email")]),
+    text_field.input([
+      attribute.id("email"),
+      attribute.placeholder("ada@glow.dev"),
+    ]),
+  ])
+}
+```
+
+## Examples
+
+Set the state of a text field with standard attributes, or compose it with field helpers.
+
+### Default
+
+A bare text input inside a field, with placeholder copy.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-72")], [
+    field.label([attribute.for("project-name")], [html.text("Project Name")]),
+    text_field.input([
+      attribute.id("project-name"),
+      attribute.placeholder("my-glow-app"),
+    ]),
+  ])
+}
+```
+
+### Required
+
+Pass the required attribute and the field's label surfaces an accent asterisk.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-72")], [
+    field.label([attribute.for("workspace-name")], [
+      html.text("Workspace Name"),
+    ]),
+    text_field.input([
+      attribute.id("workspace-name"),
+      attribute.placeholder("acme-rocketry"),
+      attribute.required(True),
+    ]),
+    field.description([], [html.text("Used in your workspace URL.")]),
+  ])
+}
+```
+
+### Invalid
+
+Set aria-invalid to surface the destructive border. Pair with field.error for the message.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-72")], [
+    field.label([attribute.for("webhook-url")], [html.text("Webhook URL")]),
+    text_field.input([
+      attribute.id("webhook-url"),
+      attribute.aria_invalid("true"),
+      attribute.value("not-a-url"),
+    ]),
+    field.error([], [html.text("Must be a valid HTTPS URL.")]),
+  ])
+}
+```
+
+### Disabled
+
+Add the disabled attribute to lock a field and drop it from the tab order.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-72")], [
+    field.label([attribute.for("workspace-id")], [html.text("Workspace ID")]),
+    text_field.input([
+      attribute.id("workspace-id"),
+      attribute.value("ws_8d4f1a2c"),
+      attribute.disabled(True),
+    ]),
+    field.description([], [html.text("Generated on workspace creation.")]),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+A single input control, no children. Type, value, and validation state all come from the attributes you pass in.
+
+| Element | Description |
+| --- | --- |
+| `text_field.input(attrs)` | Standalone text input. Renders a native input element. |
+
+### Attributes
+
+Standard Lustre attributes and events the text field responds to. Pass them through the attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.type_(...)` | Native input type: "text", "email", "password", etc. |
+| `attribute.value(...)` | Controlled value. Pair with event.on_input to handle keystrokes. |
+| `event.on_input(...)` | Message dispatched on every keystroke with the current value. |
+| `attribute.placeholder(...)` | Placeholder text shown when the value is empty. |
+| `attribute.aria_invalid("true")` | Surfaces the validation state: destructive border and error ring. |
+| `attribute.required(True)` | Marks the input as required; field.label surfaces an indicator. |
+| `attribute.disabled(True)` | Locks the input, blocks pointer events, and reduces opacity. |
+
+### Selectors
+
+CSS selectors stamped on the input's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="text-field"]` | The standalone text field. |
+| `[data-slot="text-field"]:focus-visible` | A focused text field, showing its focus outline. |
+| `[data-slot="text-field"][aria-invalid="true"]` | A text field in its validation-failure state. |
+| `[data-slot="text-field"]:disabled` | A locked, non-interactive text field. |
+
+## Accessibility
+
+**Labeled, validated, keyboard-friendly.** Renders as a native `<input>` with full keyboard support, surfaces validation via aria-invalid, and keeps the focus outline visible in both themes. Pair each control with a label element for screen readers.
+
+### Keyboard
+
+| Key | Action |
+| --- | --- |
+| Tab | Move focus to the next focusable control. |
+| Shift + Tab | Move focus to the previous focusable control. |
+| Enter | Submit the surrounding form, if any. |
+

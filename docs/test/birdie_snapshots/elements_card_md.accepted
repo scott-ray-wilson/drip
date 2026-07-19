@@ -1,0 +1,329 @@
+---
+version: 2.0.1
+title: elements/card.md
+---
+# Card
+
+A surface that groups related content and actions into a contained block.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/card
+
+pub fn view() -> Element(message) {
+  card.root([attribute.class("w-[320px]")], [
+    card.header([], [
+      card.title([], [html.text("Quick Start")]),
+      card.description([], [html.text("Get configured in seconds.")]),
+    ]),
+    card.content([], [
+      html.p([], [
+        html.text("Install the CLI, add your first element, and ship."),
+      ]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add card
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/card
+
+pub fn view() -> Element(message) {
+  card.root([], [
+    card.header([], [
+      card.title([], [html.text("Title")]),
+      card.description([], [html.text("Supporting description.")]),
+    ]),
+    card.content([], [html.text("Body content.")]),
+  ])
+}
+```
+
+## Examples
+
+Extend a card with an image, eyebrow, action, or footer, size it for dense or hero layouts, or compose a form.
+
+### Image
+
+Set an image as the card's first or last child to render it edge-to-edge, flush with the card's corners.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/card
+
+pub fn view() -> Element(message) {
+  card.root([attribute.class("w-[320px]")], [
+    html.img([
+      attribute.src("/img/ridgeline-moonlight.svg"),
+      attribute.alt("Moonlight and stars over layered mountain ridges"),
+      attribute.class("block dark:hidden aspect-video w-full object-cover"),
+    ]),
+    html.img([
+      attribute.src("/img/ridgeline-sunrise.svg"),
+      attribute.alt("Sunrise over layered mountain ridges"),
+      attribute.class("hidden dark:block aspect-video w-full object-cover"),
+    ]),
+    card.header([], [
+      card.eyebrow([], [html.text("Featured")]),
+      card.title([], [html.text("Ridgeline Overlook")]),
+      card.description([], [html.text("From first light to the last star.")]),
+    ]),
+  ])
+}
+```
+
+### Eyebrow
+
+Add an eyebrow above the title to categorize the card or signal context.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/card
+
+pub fn view() -> Element(message) {
+  card.root([attribute.class("w-[320px]")], [
+    card.header([], [
+      card.eyebrow([], [html.text("New")]),
+      card.title([], [html.text("Workspace insights")]),
+      card.description([], [
+        html.text("Track activity across every project in one place."),
+      ]),
+    ]),
+    card.content([], [
+      html.p([], [
+        html.text("Commits, reviews, and deploys in one live feed."),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Action
+
+Anchor a control to the top-right of the header with the action slot.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/card
+
+pub fn view() -> Element(message) {
+  card.root([attribute.class("w-[360px]")], [
+    card.header([], [
+      card.title([], [html.text("Notifications")]),
+      card.description([], [html.text("Manage how and when we email you.")]),
+      card.action([], [
+        button.button([button.ghost(), button.sm()], [html.text("Edit")]),
+      ]),
+    ]),
+    card.content([], [
+      html.p([], [
+        html.text("A weekly digest, plus instant alerts for mentions."),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Footer
+
+Add a footer flush against the bottom edge, with a muted tint and a dividing top border.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/card
+
+pub fn view() -> Element(message) {
+  card.root([attribute.class("w-[360px]")], [
+    card.header([], [
+      card.title([], [html.text("Invite teammates")]),
+      card.description([], [
+        html.text("Send a magic link to add a new member."),
+      ]),
+    ]),
+    card.content([], [
+      html.p([], [
+        html.text("New members get access as soon as they accept."),
+      ]),
+    ]),
+    card.footer([], [
+      button.button([button.primary(), button.sm()], [html.text("Send invite")]),
+    ]),
+  ])
+}
+```
+
+### Sizes
+
+Size a card to fit dense lists, standard layouts, or hero blocks using the size attributes.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/card
+
+pub fn view() -> Element(message) {
+  element.fragment([
+    card.root([card.sm(), attribute.class("w-[260px]")], [
+      card.header([], [
+        card.title([], [html.text("Small")]),
+        card.description([], [html.text("Compact and efficient.")]),
+      ]),
+      card.content([], [
+        html.p([], [html.text("Tighter spacing for dense layouts.")]),
+      ]),
+    ]),
+    card.root([card.md(), attribute.class("w-[260px]")], [
+      card.header([], [
+        card.title([], [html.text("Medium (default)")]),
+        card.description([], [html.text("A balanced baseline.")]),
+      ]),
+      card.content([], [
+        html.p([], [html.text("Standard spacing for most content.")]),
+      ]),
+    ]),
+    card.root([card.lg(), attribute.class("w-[320px]")], [
+      card.header([], [
+        card.title([], [html.text("Large")]),
+        card.description([], [html.text("Spacious and prominent.")]),
+      ]),
+      card.content([], [
+        html.p([], [html.text("Roomier padding for hero blocks.")]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Form
+
+Compose the header, content, and footer with field and input elements to build a self-contained form.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/card
+import ui/field
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  card.root([attribute.class("w-[360px]")], [
+    card.header([], [
+      card.title([], [html.text("Sign in")]),
+      card.description([], [
+        html.text("Enter your credentials to access your account."),
+      ]),
+    ]),
+    card.content([], [
+      field.group([], [
+        field.root(
+          [
+            field.vertical(),
+          ],
+          [
+            field.label([attribute.for("login-email")], [html.text("Email")]),
+            text_field.input([
+              attribute.id("login-email"),
+              attribute.type_("email"),
+              attribute.placeholder("ada@glow.dev"),
+            ]),
+          ],
+        ),
+        field.root(
+          [
+            field.vertical(),
+          ],
+          [
+            field.label([attribute.for("login-password")], [
+              html.text("Password"),
+            ]),
+            text_field.input([
+              attribute.id("login-password"),
+              attribute.type_("password"),
+            ]),
+          ],
+        ),
+      ]),
+    ]),
+    card.footer([], [
+      button.submit([button.primary(), button.full_width()], [
+        html.text("Sign in"),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+The root container and the composable child elements that fill its regions.
+
+| Element | Description |
+| --- | --- |
+| `card.root(attrs, children)` | The surface container that wraps the card's slots. |
+| `card.header(attrs, children)` | Top region. Hosts the eyebrow, title, description, and action. |
+| `card.eyebrow(attrs, children)` | Small uppercase label rendered above the title. |
+| `card.title(attrs, children)` | Primary heading inside the header. |
+| `card.description(attrs, children)` | Secondary supporting text inside the header. |
+| `card.action(attrs, children)` | Trailing control in the header, aligned opposite the title. |
+| `card.content(attrs, children)` | Main body region. |
+| `card.footer(attrs, children)` | Bottom region. A bordered, tinted bar for actions or summary text. |
+
+### Size Attributes
+
+Adjusts the card's padding and title scale.
+
+| Attribute | Description |
+| --- | --- |
+| `card.sm()` | Small, with tighter padding and a smaller title. |
+| `card.md()` | Medium, the default; matches a card with no size attribute. |
+| `card.lg()` | Large, with roomier padding and a larger title. |
+
+### Selectors
+
+CSS selectors stamped on the card's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="card"]` | The root container. |
+| `[data-size="sm\|md\|lg"]` | The root, tagged with its active size. |
+| `[data-slot="card-header"]` | Top region of the card. |
+| `[data-slot="card-eyebrow"]` | Uppercase label above the title. |
+| `[data-slot="card-title"]` | Primary heading inside the header. |
+| `[data-slot="card-description"]` | Supporting text inside the header. |
+| `[data-slot="card-action"]` | Trailing control in the header. |
+| `[data-slot="card-content"]` | Main body region. |
+| `[data-slot="card-footer"]` | Bottom bar for actions or summary text. |
+
+## Accessibility
+
+**No implicit semantics.** A card renders as a plain container with no implicit landmark or heading semantics; it groups content visually, not structurally. When its title heads a navigable section, give it real heading semantics (for example, a heading element in the title slot) so it joins the document outline.
+

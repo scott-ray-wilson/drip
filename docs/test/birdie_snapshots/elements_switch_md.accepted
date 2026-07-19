@@ -1,0 +1,219 @@
+---
+version: 2.0.1
+title: elements/switch.md
+---
+# Switch
+
+A binary toggle for settings that take effect immediately.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/switch
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-fit")], [
+    switch.input([
+      attribute.id("intro-notifications"),
+      attribute.checked(True),
+    ]),
+    field.label([attribute.for("intro-notifications")], [
+      html.text("Enable notifications"),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add switch
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import ui/switch
+
+pub fn view() -> Element(message) {
+  switch.input([])
+}
+```
+
+## Examples
+
+Size the switch with an attribute, pair it with field helpers, or set its state with standard attributes.
+
+### Sizes
+
+Pass the small size attribute to fit dense toolbars and inline controls.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/switch
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-fit")], [
+    field.root([field.horizontal()], [
+      switch.input([switch.sm(), attribute.id("size-small")]),
+      field.label([attribute.for("size-small")], [html.text("Small")]),
+    ]),
+    field.root([field.horizontal()], [
+      switch.input([attribute.id("size-medium")]),
+      field.label([attribute.for("size-medium")], [html.text("Medium")]),
+    ]),
+  ])
+}
+```
+
+### Label
+
+Pair the switch with a horizontal field and label to extend the click target and announce the option.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/switch
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-fit")], [
+    switch.input([attribute.id("marketing-emails"), attribute.checked(True)]),
+    field.label([attribute.for("marketing-emails")], [
+      html.text("Send me marketing emails"),
+    ]),
+  ])
+}
+```
+
+### Invalid
+
+Set aria-invalid with a field error to surface validation errors.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/switch
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-fit")], [
+    field.root([field.horizontal()], [
+      switch.input([
+        attribute.id("accept-policy"),
+        attribute.aria_invalid("true"),
+      ]),
+      field.label([attribute.for("accept-policy")], [
+        html.text("Accept the privacy policy"),
+      ]),
+    ]),
+    field.error([], [html.text("You must accept to continue.")]),
+  ])
+}
+```
+
+### Disabled
+
+Pass the disabled attribute to prevent interaction and remove the switch from the focus order.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/switch
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-fit")], [
+    field.root([field.horizontal()], [
+      switch.input([
+        attribute.id("disabled-analytics"),
+        attribute.disabled(True),
+      ]),
+      field.label([attribute.for("disabled-analytics")], [
+        html.text("Share usage analytics"),
+      ]),
+    ]),
+    field.root([field.horizontal()], [
+      switch.input([
+        attribute.id("disabled-updates"),
+        attribute.disabled(True),
+        attribute.checked(True),
+      ]),
+      field.label([attribute.for("disabled-updates")], [
+        html.text("Install updates automatically"),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+A single element wrapping a native input so the thumb can layer on top.
+
+| Element | Description |
+| --- | --- |
+| `switch.input(attrs)` | Renders the track, the native input, and the sliding thumb. |
+
+### Size Attributes
+
+Adjusts the track and thumb dimensions.
+
+| Attribute | Description |
+| --- | --- |
+| `switch.sm()` | Small, for dense toolbars, table rows, and inline controls. |
+| `switch.md()` | Medium, the default; matches a switch with no size attribute. |
+
+### Attributes
+
+Standard Lustre attributes the switch responds to. Pass them through the input's attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.checked(True)` | Fills the track with the primary surface and slides the thumb to the on edge. |
+| `attribute.disabled(True)` | Locks the switch, dims it, and removes it from the focus order. |
+| `attribute.required(True)` | Marks the switch as required and reveals the field label's indicator. |
+| `attribute.aria_invalid("true")` | Surfaces the destructive border and ring on validation failure. |
+| `attribute.name("notifications")` | Form field name submitted with the parent form. |
+| `attribute.value("enabled")` | Submitted value when checked. Defaults to "on". |
+| `attribute.id("notifications")` | Pair with field.label's for attribute to extend the click target. |
+
+### Selectors
+
+CSS selectors stamped on the switch's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="switch"]` | The root container wrapping the input and thumb. |
+| `[data-slot="switch"]:has(> input[data-size="sm\|md"])` | The root, tagged with its active size. |
+| `[data-slot="switch"] > input` | The native input control. |
+| `[data-slot="switch"]:has(> input:checked)` | The root, when its input is checked. |
+| `[data-slot="switch"]:has(> input:disabled)` | The root, when locked. |
+| `[data-slot="switch"]:has(> input[aria-invalid="true"])` | The root, flagged with a validation failure. |
+| `[data-slot="switch-thumb"]` | The thumb that slides across the track. |
+
+## Accessibility
+
+**Native semantics, keyboard ready.** Renders a native `<input type="checkbox">` with role="switch", so the browser handles toggling, focus, and form submission while assistive tech announces it as an on/off switch. Pair every switch with a field label so screen readers announce what the toggle controls.
+
+### Keyboard
+
+| Key | Action |
+| --- | --- |
+| Tab | Move focus to the switch. |
+| Shift + Tab | Move focus to the previous focusable element. |
+| Space | Toggle the on/off state. |
+

@@ -1,0 +1,5 @@
+# https://drip.pink
+User-agent: *
+Allow: /
+
+Sitemap: https://drip.pink/sitemap.xml

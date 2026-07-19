@@ -1,0 +1,290 @@
+---
+version: 2.0.1
+title: elements/empty.md
+---
+# Empty
+
+A composable empty state for surfaces with nothing to show.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/empty
+import ui/icon
+
+pub fn view() -> Element(message) {
+  empty.root([empty.outline()], [
+    empty.header([], [
+      empty.icon([], [icon.box([])]),
+      empty.title([], [html.text("No projects yet")]),
+      empty.description([], [
+        html.text(
+          "Spin up your first project to start collecting traces and metrics.",
+        ),
+      ]),
+    ]),
+    empty.content([], [
+      button.button([button.primary(), button.sm()], [
+        html.text("Create project"),
+      ]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add empty
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/empty
+import ui/icon
+
+pub fn view() -> Element(message) {
+  empty.root([], [
+    empty.header([], [
+      empty.icon([], [icon.file_text([])]),
+      empty.title([], [html.text("No documents yet")]),
+      empty.description([], [
+        html.text("Create your first document to start writing."),
+      ]),
+    ]),
+    empty.content([], [
+      button.button([button.primary()], [html.text("New document")]),
+    ]),
+  ])
+}
+```
+
+## Variants
+
+Two ways to frame the container, from a borderless ghost to a dashed outline.
+
+### Ghost
+
+Suited to empty states nested inside a card or panel that already supplies a frame.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/empty
+import ui/icon
+
+pub fn view() -> Element(message) {
+  empty.root([empty.ghost()], [
+    empty.header([], [
+      empty.icon([], [icon.box([])]),
+      empty.title([], [html.text("No projects yet")]),
+      empty.description([], [
+        html.text("Spin up your first project to start collecting data."),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Outline
+
+Sets the region apart when the empty state stands on its own.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/empty
+import ui/icon
+
+pub fn view() -> Element(message) {
+  empty.root([empty.outline()], [
+    empty.header([], [
+      empty.icon([], [icon.box([])]),
+      empty.title([], [html.text("No projects yet")]),
+      empty.description([], [
+        html.text("Spin up your first project to start collecting data."),
+      ]),
+    ]),
+  ])
+}
+```
+
+## Examples
+
+Compose an empty state from header and content slots, varying media and actions to suit.
+
+### Icon
+
+Render a tinted square tile sized for a single icon child using the icon element.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/empty
+import ui/icon
+
+pub fn view() -> Element(message) {
+  empty.root([empty.outline()], [
+    empty.header([], [
+      empty.icon([], [icon.search([])]),
+      empty.title([], [html.text("No matching results")]),
+      empty.description([], [
+        html.text("Try a different keyword or clear your filters."),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Media
+
+Place an image inside a media element for an avatar or illustration.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/empty
+
+pub fn view() -> Element(message) {
+  empty.root([], [
+    empty.header([], [
+      empty.media([], [
+        html.img([
+          attribute.src("/img/avatar.jpg"),
+          attribute.alt("Your profile photo"),
+          attribute.class("size-12 rounded-full"),
+        ]),
+      ]),
+      empty.title([], [html.text("No recent activity")]),
+      empty.description([], [
+        html.text(
+          "You haven't opened a dashboard in a while.
+          Pick up where you left off.",
+        ),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Actions
+
+Drop an action into the content element to point the user at the next step.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/empty
+import ui/icon
+
+pub fn view() -> Element(message) {
+  empty.root([empty.outline()], [
+    empty.header([], [
+      empty.icon([], [icon.user([])]),
+      empty.title([], [html.text("No team members")]),
+      empty.description([], [
+        html.text("Invite your teammates to start collaborating on projects."),
+      ]),
+    ]),
+    empty.content([], [
+      button.button([button.primary(), button.sm()], [
+        html.text("Invite people"),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Rich Content
+
+Stack multiple actions inside the content element and pair them with helper text or links.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/empty
+import ui/icon
+
+pub fn view() -> Element(message) {
+  empty.root([empty.outline()], [
+    empty.header([], [
+      empty.icon([], [icon.box([])]),
+      empty.title([], [html.text("No items in this collection")]),
+      empty.description([], [
+        html.text(
+          "Add an item from your library or import a CSV to get started.",
+        ),
+      ]),
+    ]),
+    empty.content([], [
+      html.div([attribute.class("flex gap-2")], [
+        button.button([button.primary(), button.sm()], [html.text("Add item")]),
+        button.button([button.outline(), button.sm()], [
+          html.text("Import CSV"),
+        ]),
+      ]),
+      html.p([attribute.class("text-xs text-muted-foreground")], [
+        html.text("Need help? "),
+        html.a([attribute.href("#")], [html.text("Read the docs")]),
+        html.text("."),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Variants
+
+Sets how the container is framed. Pass one into the root's attribute list.
+
+| Variant | Description |
+| --- | --- |
+| `empty.ghost()` | The default borderless surface, for empty states a card or panel already frames. |
+| `empty.outline()` | Frames the surface with a dashed border. |
+
+### Elements
+
+The root element and slots that compose its body.
+
+| Element | Description |
+| --- | --- |
+| `empty.root(attrs, children)` | Surface container. |
+| `empty.header(attrs, children)` | Top region grouping the optional media or icon, title, and description. |
+| `empty.media(attrs, children)` | Transparent slot for illustrations or larger imagery. |
+| `empty.icon(attrs, children)` | Tinted square tile sized for a single decorative icon. |
+| `empty.title(attrs, children)` | Primary heading inside the header. |
+| `empty.description(attrs, children)` | Secondary supporting text inside the header. |
+| `empty.content(attrs, children)` | Body region below the header for actions, links, or supporting copy. |
+
+### Selectors
+
+CSS selectors stamped on the empty state's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="empty"]` | The root container. |
+| `[data-slot="empty"][data-variant="ghost\|outline"]` | The root, tagged with its active framing. |
+| `[data-slot="empty-header"]` | The header region of the container. |
+| `[data-slot="empty-media"]` | The transparent media slot. |
+| `[data-slot="empty-icon"]` | The tinted square media slot. |
+| `[data-slot="empty-title"]` | The title row inside the header. |
+| `[data-slot="empty-description"]` | The description row inside the header. |
+| `[data-slot="empty-content"]` | The content region below the header. |
+
+## Accessibility
+
+**Plain container semantics.** Empty states render as plain containers, so they carry no landmark role. Place them inside the surrounding region (a list, a panel, a section) that already announces context to assistive tech.
+

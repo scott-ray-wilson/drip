@@ -1,0 +1,54 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# One deploy per branch
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # Fork PRs don't receive secrets, so wrangler-action would fail and red-flag
+    # every external contributor's PR; only deploy for branches in this repo.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27"
+          gleam-version: "1.17.0"
+      - uses: actions/setup-node@v7 # build.sh's generate_md step requires node
+        with:
+          node-version: "22"
+
+      # Cache the Hex package downloads and the Tailwind binary lustre fetches.
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cache/gleam
+            docs/.lustre
+          key: ${{ runner.os }}-gleam-${{ hashFiles('**/manifest.toml') }}
+          restore-keys: ${{ runner.os }}-gleam-
+
+      # codegen -> gleam build -> generate_md -> lustre/dev build, into docs/dist
+      - name: Build docs site
+        run: bash scripts/build.sh
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Deploying with the project's production branch (main) publishes to
+          # production; any other branch name publishes a preview deployment.
+          command: >-
+            pages deploy docs/dist
+            --project-name=drip-docs
+            --branch=${{ github.head_ref || github.ref_name }}

@@ -1,0 +1,96 @@
+@layer components {
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="button-group"] {
+    @apply flex w-fit items-stretch;
+  }
+  /* The hovered or focused control rides above its neighbors so its full
+     border (and focus outline) shows over the overlapping shared edges. The
+     :has() leg covers wrapper children, where focus lands on a descendant
+     rather than the child itself (:hover matches ancestors on its own). */
+  [data-slot="button-group"] > *:hover {
+    @apply relative z-10;
+  }
+  [data-slot="button-group"] > *:focus-visible,
+  [data-slot="button-group"] > *:has(:focus-visible) {
+    @apply relative z-20;
+  }
+
+  /* Nested groups get a small gap between them. */
+  [data-slot="button-group"]:has(> [data-slot="button-group"]) {
+    @apply gap-2;
+  }
+
+  /* --- Horizontal (Default Orientation) ----------------------------------- */
+  [data-slot="button-group"]:not([data-orientation]) > *:not(:first-child),
+  [data-slot="button-group"][data-orientation="horizontal"]
+    > *:not(:first-child) {
+    @apply rounded-l-none -ml-px;
+  }
+  /* A dropdown trigger is trailed by its <lustre-portal> host. The host is
+     hidden (no layout box) but sibling selectors still see it, so "last
+     child" must skip portal hosts to keep the trigger's trailing corners. */
+  [data-slot="button-group"]:not([data-orientation])
+    > *:has(~ *:not(lustre-portal)),
+  [data-slot="button-group"][data-orientation="horizontal"]
+    > *:has(~ *:not(lustre-portal)) {
+    @apply rounded-r-none;
+  }
+
+  /* --- Vertical (Orientation) --------------------------------------------- */
+  [data-slot="button-group"][data-orientation="vertical"] {
+    @apply flex-col;
+  }
+  [data-slot="button-group"][data-orientation="vertical"]
+    > *:not(:first-child) {
+    @apply rounded-t-none -mt-px;
+  }
+  [data-slot="button-group"][data-orientation="vertical"]
+    > *:has(~ *:not(lustre-portal)) {
+    @apply rounded-b-none;
+  }
+
+  /* --- Separator ---------------------------------------------------------- */
+  [data-slot="button-group-separator"] {
+    @apply shrink-0 bg-transparent;
+  }
+  [data-slot="button-group"]:not([data-orientation])
+    > [data-slot="button-group-separator"],
+  [data-slot="button-group"][data-orientation="horizontal"]
+    > [data-slot="button-group-separator"] {
+    @apply w-px self-stretch;
+  }
+  [data-slot="button-group"][data-orientation="vertical"]
+    > [data-slot="button-group-separator"] {
+    @apply h-px w-full;
+  }
+
+  /* A separator (with the control after it) and nested groups are meant to
+     sit apart with real spacing, so they opt out of the overlap margin that
+     joins adjacent buttons. */
+  [data-slot="button-group"]:not([data-orientation])
+    > [data-slot="button-group-separator"],
+  [data-slot="button-group"]:not([data-orientation])
+    > [data-slot="button-group-separator"] + *,
+  [data-slot="button-group"]:not([data-orientation]) > [data-slot="button-group"],
+  [data-slot="button-group"][data-orientation="horizontal"]
+    > [data-slot="button-group-separator"],
+  [data-slot="button-group"][data-orientation="horizontal"]
+    > [data-slot="button-group-separator"] + *,
+  [data-slot="button-group"][data-orientation="horizontal"]
+    > [data-slot="button-group"] {
+    @apply ml-0;
+  }
+  [data-slot="button-group"][data-orientation="vertical"]
+    > [data-slot="button-group-separator"],
+  [data-slot="button-group"][data-orientation="vertical"]
+    > [data-slot="button-group-separator"] + *,
+  [data-slot="button-group"][data-orientation="vertical"]
+    > [data-slot="button-group"] {
+    @apply mt-0;
+  }
+
+  /* --- Embedded Controls -------------------------------------------------- */
+  [data-slot="button-group"] > input {
+    @apply flex-1;
+  }
+}

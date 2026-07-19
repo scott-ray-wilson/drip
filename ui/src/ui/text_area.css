@@ -1,0 +1,32 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="text-area"] {
+    @apply field-sizing-content min-h-16 w-full min-w-0 bg-input border
+           border-border rounded-sm px-2.5 py-1.75 text-sm text-foreground
+           transition-[background-color,border-color,color,box-shadow]
+           duration-200 ease-out-soft resize-y;
+  }
+
+  [data-slot="text-area"]::placeholder {
+    @apply text-foreground-subtle;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+  [data-slot="text-area"]:hover:not(:disabled) {
+    @apply border-border-strong;
+  }
+  [data-slot="text-area"]:focus-visible {
+    @apply outline-2 outline-offset-0 border-outline!;
+  }
+  [data-slot="text-area"]:disabled {
+    @apply pointer-events-none cursor-not-allowed opacity-50;
+  }
+  [data-slot="text-area"][aria-invalid="true"] {
+    @apply border-error! ring-error/40 ring-2;
+  }
+  /* Invalid + focused: drop the ring (it tints the translucent focus
+     outline); the error border keeps the state visible. */
+  [data-slot="text-area"][aria-invalid="true"]:focus-visible {
+    @apply ring-0 border-error!;
+  }
+}

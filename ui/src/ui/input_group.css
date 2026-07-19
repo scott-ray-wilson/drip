@@ -1,0 +1,175 @@
+@layer components {
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="input-group"] {
+    @apply relative flex h-9 w-full min-w-0 items-center gap-2.5
+           bg-input border border-border rounded-sm
+           px-2.5 py-[7px] text-sm text-foreground-subtle
+           transition-[background-color,border-color,color,box-shadow]
+           duration-200 ease-out-soft;
+  }
+  [data-slot="input-group"]:has(> textarea),
+  [data-slot="input-group"]:has(
+    > [data-slot="input-group-addon"][data-align="block-start"]
+  ),
+  [data-slot="input-group"]:has(
+    > [data-slot="input-group-addon"][data-align="block-end"]
+  ) {
+    @apply h-auto;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+  [data-slot="input-group"]:hover {
+    @apply border-border-strong;
+  }
+  [data-slot="input-group"]:has(input:focus-visible),
+  [data-slot="input-group"]:has(textarea:focus-visible) {
+    @apply outline-2 border-outline;
+  }
+  [data-slot="input-group"]:has(input[aria-invalid="true"]),
+  [data-slot="input-group"]:has(textarea[aria-invalid="true"]) {
+    @apply border-error ring-error/40 ring-2;
+  }
+  /* Invalid + focused: drop the ring (it tints the translucent focus
+     outline); the error border keeps the state visible. */
+  [data-slot="input-group"]:has(input[aria-invalid="true"]:focus-visible),
+  [data-slot="input-group"]:has(textarea[aria-invalid="true"]:focus-visible) {
+    @apply ring-0 border-error;
+  }
+  [data-slot="input-group"]:has(:disabled) {
+    @apply opacity-50;
+  }
+
+  /* --- Block Stacking ----------------------------------------------------- */
+  [data-slot="input-group"]:has(
+    > [data-slot="input-group-addon"][data-align="block-start"]
+  ),
+  [data-slot="input-group"]:has(
+    > [data-slot="input-group-addon"][data-align="block-end"]
+  ) {
+    @apply flex-col;
+  }
+
+  /* --- Addon -------------------------------------------------------------- */
+  [data-slot="input-group-addon"] {
+    @apply flex h-auto cursor-text items-center justify-center gap-2
+           text-sm text-foreground-subtle select-none;
+  }
+  [data-slot="input-group-addon"] > kbd {
+    @apply rounded-[3px] font-mono text-[10px] tracking-[0.08em]
+           border border-border px-[5px] py-px;
+  }
+  [data-slot="input-group-addon"] svg {
+    @apply pointer-events-none shrink-0;
+  }
+  [data-slot="input-group-addon"] > svg:not([class*="size-"]) {
+    @apply size-3.5;
+  }
+
+  /* --- Addon Alignment ---------------------------------------------------- */
+  [data-slot="input-group-addon"][data-align="inline-start"] {
+    @apply order-first;
+  }
+  [data-slot="input-group-addon"][data-align="inline-end"] {
+    @apply order-last ml-auto;
+  }
+  [data-slot="input-group-addon"][data-align="block-start"] {
+    @apply order-first w-full justify-start px-2.5 pt-2;
+  }
+  [data-slot="input-group-addon"][data-align="block-end"] {
+    @apply order-last w-full justify-start px-2.5 pb-2;
+  }
+
+  /* --- Button Inset ------------------------------------------------------- */
+  [data-slot="input-group"]:has(
+    [data-slot="input-group-addon"][data-align="inline-end"]
+      [data-slot="input-group-button"]
+  ) {
+    @apply pr-[5px];
+  }
+  [data-slot="input-group"]:has(
+    [data-slot="input-group-addon"][data-align="inline-start"]
+      [data-slot="input-group-button"]
+  ) {
+    @apply pl-[5px];
+  }
+
+  /* --- Inline Button ------------------------------------------------------ */
+  [data-slot="input-group-button"] {
+    @apply inline-flex h-6 px-[5px] items-center justify-center gap-1
+           rounded-sm text-xs font-medium
+           text-foreground-subtle select-none whitespace-nowrap
+           transition-[background-color,border-color,color,box-shadow,scale]
+           duration-200 ease-out-soft cursor-pointer
+           bg-transparent border border-transparent;
+  }
+  [data-slot="input-group-button"]:hover {
+    @apply bg-muted text-foreground;
+  }
+  [data-slot="input-group-button"]:focus-visible {
+    @apply outline;
+  }
+  [data-slot="input-group-button"]:active {
+    @apply scale-[0.99];
+  }
+  [data-slot="input-group-button"]:disabled {
+    @apply pointer-events-none opacity-50;
+  }
+  [data-slot="input-group-button"] svg {
+    @apply pointer-events-none shrink-0;
+  }
+  [data-slot="input-group-button"] > svg:not([class*="size-"]) {
+    @apply size-3;
+  }
+
+  /* --- Text Adornment ----------------------------------------------------- */
+  [data-slot="input-group-text"] {
+    @apply flex items-center gap-2 text-sm text-muted-foreground;
+  }
+  [data-slot="input-group-text"] svg {
+    @apply pointer-events-none;
+  }
+  [data-slot="input-group-text"] svg:not([class*="size-"]) {
+    @apply size-4;
+  }
+
+  /* --- Input Control ------------------------------------------------------ */
+  input[data-slot="input-group-control"] {
+    @apply flex-1 w-full min-w-0 border-0 bg-transparent p-0
+           text-sm text-foreground outline-none transition-colors;
+  }
+  input[data-slot="input-group-control"]::placeholder {
+    @apply text-foreground-subtle;
+  }
+  input[data-slot="input-group-control"]:focus-visible {
+    @apply outline-none;
+  }
+  input[data-slot="input-group-control"]:disabled {
+    @apply pointer-events-none cursor-not-allowed bg-transparent;
+  }
+  /* Hide the native number stepper — it collides with addons and the group
+     already supplies its own controls when needed. */
+  input[data-slot="input-group-control"]::-webkit-inner-spin-button,
+  input[data-slot="input-group-control"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[data-slot="input-group-control"][type="number"] {
+    appearance: textfield; /* Firefox */
+  }
+
+  /* --- Textarea Control --------------------------------------------------- */
+  textarea[data-slot="input-group-control"] {
+    @apply field-sizing-content min-h-16 flex-1 w-full min-w-0 resize-none
+           border-0 bg-transparent p-0 text-sm text-foreground
+           outline-none transition-colors;
+  }
+  textarea[data-slot="input-group-control"]::placeholder {
+    @apply text-foreground-subtle;
+  }
+  textarea[data-slot="input-group-control"]:focus-visible {
+    @apply outline-none;
+  }
+  textarea[data-slot="input-group-control"]:disabled {
+    @apply pointer-events-none cursor-not-allowed bg-transparent;
+  }
+}

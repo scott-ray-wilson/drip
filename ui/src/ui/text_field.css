@@ -1,0 +1,50 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="text-field"] {
+    @apply h-9 w-full min-w-0 bg-input border border-border rounded-sm
+           px-2.5 text-sm text-foreground
+           transition-[background-color,border-color,color,box-shadow]
+           duration-200 ease-out-soft;
+  }
+
+  [data-slot="text-field"]::placeholder {
+    @apply text-foreground-subtle;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+  [data-slot="text-field"]:hover:not(:disabled) {
+    @apply border-border-strong;
+  }
+  [data-slot="text-field"]:focus-visible {
+    @apply outline-2 outline-offset-0 border-outline!;
+  }
+  [data-slot="text-field"]:disabled {
+    @apply pointer-events-none cursor-not-allowed opacity-50;
+  }
+  [data-slot="text-field"][aria-invalid="true"] {
+    @apply border-error! ring-error/40 ring-2;
+  }
+  /* Invalid + focused: drop the ring (it tints the translucent focus
+     outline); the error border keeps the state visible. */
+  [data-slot="text-field"][aria-invalid="true"]:focus-visible {
+    @apply ring-0 border-error!;
+  }
+
+  /* --- Autofill ----------------------------------------------------------- */
+  /* The inset shadow covers the UA's forced autofill tint; it sits after
+     States to beat the invalid ring (the error border keeps the state). */
+  [data-slot="text-field"]:-webkit-autofill,
+  [data-slot="text-field"]:-webkit-autofill:hover,
+  [data-slot="text-field"]:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--input) inset;
+    -webkit-text-fill-color: var(--foreground);
+    caret-color: var(--foreground);
+    transition-property: background-color, border-color, color;
+  }
+
+  /* --- File Input Button -------------------------------------------------- */
+  [data-slot="text-field"]::file-selector-button {
+    @apply inline-flex cursor-pointer border-0 bg-transparent
+           text-sm font-medium text-foreground;
+  }
+}

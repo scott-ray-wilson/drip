@@ -1,0 +1,21 @@
+name = "codegen"
+description = "Generates the docs site snippets and the release dist/ from the registry and ui sources."
+version = "1.0.0"
+target = "erlang"
+
+licences = ["MIT"]
+
+# Internal build tool: never published to Hex (see ../PUBLISHING.md).
+
+[dependencies]
+drip_registry = { path = "../registry" }
+swatch = ">= 1.0.0 and < 2.0.0"
+gleam_stdlib = ">= 1.0.0 and < 2.0.0"
+gleam_json = ">= 3.0.0 and < 4.0.0"
+just = ">= 2.1.0 and < 3.0.0"
+contour = ">= 1.2.1 and < 2.0.0"
+simplifile = ">= 2.4.0 and < 3.0.0"
+shellout = ">= 1.8.0 and < 2.0.0"
+
+[dev_dependencies]
+gleeunit = ">= 1.0.0 and < 2.0.0"

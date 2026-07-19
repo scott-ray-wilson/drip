@@ -1,4 +1,16 @@
 *.beam
 *.ez
 build/
+dist/
 erl_crash.dump
+.lustre
+.DS_Store
+
+# generated at build time by codegen and scripts/generate_md.mjs
+docs/src/docs/generated
+docs/assets/*.md
+docs/assets/elements/*.md
+docs/assets/sitemap.xml
+
+# local sandbox for exercising the drip CLI against the built dist/
+playground/

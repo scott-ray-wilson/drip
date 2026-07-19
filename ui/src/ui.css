@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@import "./ui/theme.css";
+
+@import "./ui/accordion.css";
+@import "./ui/alert.css";
+@import "./ui/alert_dialog.css";
+@import "./ui/badge.css";
+@import "./ui/button.css";
+@import "./ui/button_group.css";
+@import "./ui/card.css";
+@import "./ui/checkbox.css";
+@import "./ui/command.css";
+@import "./ui/dialog.css";
+@import "./ui/dropdown_menu.css";
+@import "./ui/empty.css";
+@import "./ui/field.css";
+@import "./ui/icon_tile.css";
+@import "./ui/input_group.css";
+@import "./ui/kbd.css";
+@import "./ui/radio_group.css";
+@import "./ui/separator.css";
+@import "./ui/sidebar.css";
+@import "./ui/spinner.css";
+@import "./ui/switch.css";
+@import "./ui/table.css";
+@import "./ui/tabs.css";
+@import "./ui/text_area.css";
+@import "./ui/text_field.css";
+@import "./ui/typography.css";

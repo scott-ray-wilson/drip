@@ -1,0 +1,71 @@
+@layer components {
+  /* --- Page Title --------------------------------------------------------- */
+  [data-slot="page-title"] {
+    @apply font-display font-bold text-4xl leading-[44px]
+           tracking-[-0.025em] text-foreground my-4;
+  }
+
+  /* --- H1 ----------------------------------------------------------------- */
+  [data-slot="h1"] {
+    @apply font-display font-bold text-3xl leading-9
+           tracking-[-0.02em] text-foreground;
+  }
+
+  /* --- H2 ----------------------------------------------------------------- */
+  [data-slot="h2"] {
+    @apply font-display font-bold text-2xl leading-7
+           tracking-[-0.01em] text-foreground
+           mt-14 mb-[18px] flex items-center gap-2;
+  }
+
+  /* --- H3 ----------------------------------------------------------------- */
+  [data-slot="h3"] {
+    @apply font-display font-semibold text-xl leading-[22px]
+           text-foreground mt-8 mb-4 flex items-center gap-2;
+  }
+
+  /* --- Lede --------------------------------------------------------------- */
+  [data-slot="lede"] {
+    @apply font-sans text-base leading-[26px] text-muted-foreground
+           max-w-[720px] mb-8;
+  }
+
+  /* --- Body Large --------------------------------------------------------- */
+  [data-slot="body-large"] {
+    @apply font-sans text-base leading-6 text-muted-foreground;
+  }
+
+  /* --- Body --------------------------------------------------------------- */
+  [data-slot="body"] {
+    @apply font-sans text-sm leading-5 text-muted-foreground;
+  }
+
+  /* --- Body Small --------------------------------------------------------- */
+  [data-slot="body-small"] {
+    @apply font-sans text-xs leading-4 text-foreground-subtle;
+  }
+
+  /* --- Eyebrow ------------------------------------------------------------ */
+  [data-slot="eyebrow"] {
+    @apply inline-flex font-sans text-2xs uppercase text-foreground-subtle font-medium;
+  }
+
+  /* --- Mono --------------------------------------------------------------- */
+  [data-slot="mono"] {
+    @apply font-mono text-sm leading-4 text-foreground;
+  }
+
+  /* --- Code --------------------------------------------------------------- */
+  [data-slot="code"] {
+    @apply font-mono text-[12.5px] leading-4 text-(--accent-light)
+           rounded-lg border border-border/50 bg-muted/50 px-1;
+    /* Keep the chip intact when a long command wraps across lines. */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  /* --- Star --------------------------------------------------------------- */
+  [data-slot="star"] {
+    @apply font-mono text-sm font-normal text-accent;
+  }
+}

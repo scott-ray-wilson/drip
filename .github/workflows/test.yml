@@ -1,0 +1,82 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      # Without this, the cli job failing cancels ui/registry/codegen mid-run,
+      # masking whether those actually pass. Let every project report on its own.
+      fail-fast: false
+      matrix:
+        project: [ui, registry, cli, codegen]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27"
+          gleam-version: "1.17.0"
+          # cli's test mock server (mist dev-dep) pulls in hpack_erl, which is
+          # built with rebar3; setup-beam only installs rebar3 when asked.
+          rebar3-version: "3"
+      - run: gleam deps download
+        working-directory: ${{ matrix.project }}
+      - run: gleam test
+        working-directory: ${{ matrix.project }}
+      # registry is shipped to BOTH targets
+      # (erlang: cli/codegen, javascript: docs). also run JS.
+      - if: matrix.project == 'registry'
+        run: gleam test --target javascript
+        working-directory: registry
+      - run: gleam format --check src test
+        working-directory: ${{ matrix.project }}
+
+  # The CLI does real path manipulation (vendoring files, joining src/<prefix>,
+  # writing temp scratch dirs); run its suite on macOS and Windows too, where
+  # path separators and temp-dir conventions differ. The other packages are
+  # platform-agnostic, so the ubuntu matrix above covers them.
+  cli-cross-platform:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27"
+          gleam-version: "1.17.0"
+          # mist (cli's mock-server dev-dep) -> hpack_erl, which is rebar3-built.
+          rebar3-version: "3"
+      - run: gleam deps download
+        working-directory: cli
+      - run: gleam test
+        working-directory: cli
+
+  # docs imports src/docs/generated/** (produced by codegen, gitignored), so
+  # codegen must run before docs will compile.
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27"
+          gleam-version: "1.17.0"
+      - name: Generate docs sources (codegen)
+        run: gleam run
+        working-directory: codegen
+      # docs renders pages via lustre_portal's FFI, which needs a DOM stub
+      # preloaded; see docs/test/dom_shim.mjs.
+      - run: gleam test
+        working-directory: docs
+        env:
+          NODE_OPTIONS: "--import ./test/dom_shim.mjs"
+      - run: gleam format --check src test
+        working-directory: docs

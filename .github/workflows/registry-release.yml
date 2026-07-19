@@ -1,0 +1,61 @@
+name: registry-release
+
+# Registry release: build the flat dist/ (registry.json index + element files +
+# theme.css) and publish it as a GitHub Release marked latest. The CLI fetches
+# these assets from `/releases/latest/download/<asset>` at runtime.
+on:
+  push:
+    tags:
+      - "registry-v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27"
+          gleam-version: "1.17.0"
+          # Match test.yml's toolchain so the gate below runs in the same
+          # environment the suites are validated in on every PR.
+          rebar3-version: "3"
+
+      # The release is immutable and marked latest, and tag pushes never run
+      # test.yml, so refuse anything but a registry-v* tag. A stray
+      # workflow_dispatch from a branch would otherwise do all the work and then
+      # fail opaquely at the upload step (action-gh-release requires a tag).
+      - name: Assert running from a registry-v* tag
+        run: |
+          case "$GITHUB_REF" in
+            refs/tags/registry-v*) echo "releasing $GITHUB_REF_NAME" ;;
+            *) echo "::error::registry-release must run from a registry-v* tag (got $GITHUB_REF)"; exit 1 ;;
+          esac
+
+      # Gate the release on a green suite: the dist/ the CLI fetches is generated
+      # by codegen from ui/ + registry/, and tag pushes skip test.yml, so run the
+      # source suites here before publishing. registry ships to both targets.
+      - run: gleam test
+        working-directory: ui
+      - run: gleam test
+        working-directory: registry
+      - run: gleam test --target javascript
+        working-directory: registry
+      - run: gleam test
+        working-directory: codegen
+
+      # Re-runs codegen and validates the result: registry.json parses, every
+      # referenced file exists in dist/, and the emitted set is dependency-closed.
+      - name: Build and validate dist/
+        run: bash scripts/release-preflight.sh
+
+      - name: Publish GitHub Release with dist/* assets
+        uses: softprops/action-gh-release@v3
+        with:
+          files: dist/*
+          make_latest: true
+          fail_on_unmatched_files: true

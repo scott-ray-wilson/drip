@@ -1,0 +1,139 @@
+@layer components {
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="dialog"] {
+    @apply m-auto grid w-full max-w-[calc(100%-2rem)] gap-4 rounded-2xl
+           border-0 bg-elevated p-4 text-sm text-elevated-foreground
+           ring-1 ring-foreground/10 outline-none sm:max-w-sm;
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+    transition:
+      opacity 180ms var(--ease-out-soft),
+      transform 180ms var(--ease-out-soft),
+      display 180ms allow-discrete,
+      overlay 180ms allow-discrete;
+  }
+  [data-slot="dialog"][open] {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  [data-slot="dialog"]:not([open]) {
+    display: none;
+  }
+  @starting-style {
+    [data-slot="dialog"][open] {
+      opacity: 0;
+      transform: scale(0.96) translateY(4px);
+    }
+  }
+
+  /* --- Backdrop ----------------------------------------------------------- */
+  [data-slot="dialog"]::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+    transition:
+      background-color 180ms var(--ease-out-soft),
+      backdrop-filter 180ms var(--ease-out-soft),
+      display 180ms allow-discrete,
+      overlay 180ms allow-discrete;
+  }
+  [data-slot="dialog"][open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  @supports (backdrop-filter: blur(0)) {
+    [data-slot="dialog"][open]::backdrop {
+      backdrop-filter: blur(4px);
+    }
+  }
+  @starting-style {
+    [data-slot="dialog"][open]::backdrop {
+      background-color: rgba(0, 0, 0, 0);
+      backdrop-filter: blur(0);
+    }
+  }
+
+  /* --- Scroll Lock -------------------------------------------------------- */
+  html:has([data-slot="dialog"][open]) {
+    scrollbar-gutter: stable;
+  }
+  body:has([data-slot="dialog"][open]) {
+    overflow: hidden;
+  }
+
+  /* --- Header ------------------------------------------------------------- */
+  [data-slot="dialog-header"] {
+    @apply flex flex-col gap-2;
+  }
+
+  /* --- Footer ------------------------------------------------------------- */
+  [data-slot="dialog-footer"] {
+    @apply -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-2xl border-t
+           bg-muted/50 p-4 sm:flex-row sm:justify-end;
+  }
+
+  /* --- Title -------------------------------------------------------------- */
+  [data-slot="dialog-title"] {
+    @apply m-0 text-base font-medium leading-none;
+  }
+
+  /* --- Description -------------------------------------------------------- */
+  [data-slot="dialog-description"] {
+    @apply m-0 text-sm text-muted-foreground;
+  }
+  [data-slot="dialog-description"] > a {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="dialog-description"] > a:hover {
+    @apply text-foreground;
+  }
+  [data-slot="dialog-description"] > a:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+
+  /* --- Close (Base) ------------------------------------------------------- */
+  [data-slot="dialog-close"] {
+    @apply inline-flex cursor-pointer items-center justify-center
+           transition-colors;
+  }
+  [data-slot="dialog-close"]:focus-visible {
+    @apply outline;
+  }
+  [data-slot="dialog-close"]:disabled {
+    @apply pointer-events-none opacity-50;
+  }
+
+  /* --- Close (Text Button) ------------------------------------------------ */
+  [data-slot="dialog-close"]:not([data-variant="icon"]) {
+    @apply h-8 gap-1.5 rounded-sm border border-border bg-background px-2.5
+           text-sm font-medium whitespace-nowrap select-none;
+  }
+  [data-slot="dialog-close"]:not([data-variant="icon"]):hover {
+    @apply bg-muted text-foreground;
+  }
+  .dark [data-slot="dialog-close"]:not([data-variant="icon"]) {
+    @apply border-border bg-muted/50;
+  }
+  .dark [data-slot="dialog-close"]:not([data-variant="icon"]):hover {
+    @apply bg-muted;
+  }
+
+  /* --- Close (Icon Button) ------------------------------------------------ */
+  [data-slot="dialog-close"][data-variant="icon"] {
+    @apply absolute top-2 right-2 size-7 rounded-sm text-muted-foreground;
+  }
+  [data-slot="dialog-close"][data-variant="icon"]:hover {
+    @apply bg-muted text-foreground;
+  }
+  [data-slot="dialog-close"][data-variant="icon"] svg {
+    @apply pointer-events-none shrink-0;
+  }
+  [data-slot="dialog-close"][data-variant="icon"] svg:not([class*="size-"]) {
+    @apply size-4;
+  }
+
+  /* --- Reduced Motion ----------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="dialog"],
+    [data-slot="dialog"]::backdrop {
+      transition: none;
+    }
+  }
+}

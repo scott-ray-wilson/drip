@@ -1,0 +1,183 @@
+@layer components {
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="accordion"] {
+    @apply flex w-full flex-col;
+    /* Lets ::details-content transition block-size to auto. */
+    interpolate-size: allow-keywords;
+  }
+
+  /* --- Items -------------------------------------------------------------- */
+  /* The transparent border reserves the focus ring border so :focus-visible
+     never shifts layout. */
+  [data-slot="accordion"] > [data-slot="accordion-item"] {
+    @apply rounded-sm border border-transparent;
+  }
+  [data-slot="accordion"] > [data-slot="accordion-item"]:not(:first-child) {
+    @apply rounded-t-none;
+  }
+  [data-slot="accordion"] > [data-slot="accordion-item"]:not(:last-child) {
+    @apply rounded-b-none;
+  }
+
+  /* --- Trigger ------------------------------------------------------------ */
+  [data-slot="accordion-trigger"] {
+    @apply relative flex items-center gap-2.5 py-2.5 cursor-pointer
+           select-none list-none text-left text-sm font-medium underline
+           decoration-transparent underline-offset-2 transition-all
+           duration-300 ease-out-soft;
+  }
+  [data-slot="accordion-trigger"]::-webkit-details-marker {
+    display: none;
+  }
+  [data-slot="accordion-trigger"]:hover {
+    @apply decoration-muted-foreground;
+  }
+
+  /* --- Trigger Icons ------------------------------------------------------ */
+  [data-slot="accordion-trigger"] svg {
+    @apply pointer-events-none shrink-0 text-muted-foreground;
+  }
+  [data-slot="accordion-trigger"] svg:not([class*="size-"]) {
+    @apply size-4;
+  }
+  [data-slot="accordion-trigger-icon"] {
+    @apply ml-auto transition-transform duration-200;
+  }
+  [data-slot="accordion-item"][open]
+    > [data-slot="accordion-trigger"]
+    [data-slot="accordion-trigger-icon"] {
+    @apply rotate-180;
+  }
+
+  /* --- Content ------------------------------------------------------------ */
+  [data-slot="accordion-content"] {
+    @apply overflow-hidden text-sm pb-2.5;
+  }
+  [data-slot="accordion-content"] a {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="accordion-content"] a:hover {
+    @apply text-foreground;
+  }
+  [data-slot="accordion-content"] a:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+  [data-slot="accordion-content"] p:not(:last-child) {
+    @apply mb-4;
+  }
+
+  /* --- Open / Close Animation --------------------------------------------- */
+  [data-slot="accordion-item"]::details-content {
+    block-size: 0;
+    overflow: clip;
+    opacity: 0;
+    transition:
+      block-size 200ms ease,
+      opacity 200ms ease,
+      content-visibility 200ms allow-discrete;
+  }
+  [data-slot="accordion-item"][open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
+  /* --- Ghost (Default Variant) -------------------------------------------- */
+  [data-slot="accordion"]:not([data-variant])
+    > [data-slot="accordion-item"]:not(:last-child),
+  [data-slot="accordion"][data-variant="ghost"]
+    > [data-slot="accordion-item"]:not(:last-child) {
+    @apply border-b-border;
+  }
+
+  /* --- Outline + Filled (Shared) ------------------------------------------ */
+  [data-slot="accordion"]:where(
+      [data-variant="outline"],
+      [data-variant="filled"]
+    )
+    > [data-slot="accordion-item"] {
+    @apply border border-border
+    transition-[border-color,box-shadow] duration-200;
+  }
+  [data-slot="accordion"]:where(
+      [data-variant="outline"],
+      [data-variant="filled"]
+    )
+    > [data-slot="accordion-item"]:not(:first-child) {
+    @apply border-t-0;
+  }
+  [data-slot="accordion"]:where(
+      [data-variant="outline"],
+      [data-variant="filled"]
+    )
+    > [data-slot="accordion-item"]
+    > :where([data-slot="accordion-trigger"], [data-slot="accordion-content"]) {
+    @apply px-4;
+  }
+  [data-slot="accordion"]:where(
+      [data-variant="outline"],
+      [data-variant="filled"]
+    )
+    > [data-slot="accordion-item"][open]
+    > [data-slot="accordion-trigger"] {
+    @apply text-foreground;
+  }
+
+  /* --- Filled (Variant) --------------------------------------------------- */
+  [data-slot="accordion"][data-variant="filled"]
+    > [data-slot="accordion-item"] {
+    @apply bg-card;
+  }
+
+  /* --- Focus Ring --------------------------------------------------------- */
+  /* The trigger suppresses its own outline; the item draws the ring on the
+     reserved border instead. */
+  [data-slot="accordion-trigger"]:focus-visible {
+    @apply outline-none;
+  }
+  [data-slot="accordion-item"]:has(
+    > [data-slot="accordion-trigger"]:focus-visible
+  ) {
+    @apply relative z-1 outline-2 border-outline;
+  }
+  /* Ghost's hairline outranks the generic ring; re-assert the ring color. */
+  [data-slot="accordion"]:not([data-variant])
+    > [data-slot="accordion-item"]:has(
+      > [data-slot="accordion-trigger"]:focus-visible
+    ),
+  [data-slot="accordion"][data-variant="ghost"]
+    > [data-slot="accordion-item"]:has(
+      > [data-slot="accordion-trigger"]:focus-visible
+    ) {
+    @apply border-outline;
+  }
+  /* Focus restores the collapsed top border; the negative margin compensates
+     so the ring closes on all four sides without shifting layout. */
+  [data-slot="accordion"]:where(
+      [data-variant="outline"],
+      [data-variant="filled"]
+    )
+    > [data-slot="accordion-item"]:not(:first-child):has(
+      > [data-slot="accordion-trigger"]:focus-visible
+    ) {
+    @apply border-t -mt-px;
+  }
+
+  /* --- Disabled (State) --------------------------------------------------- */
+  [data-slot="accordion-item"][inert] > [data-slot="accordion-trigger"] {
+    @apply opacity-50 no-underline;
+  }
+
+  /* --- Reduced Motion ----------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="accordion-item"]::details-content,
+    [data-slot="accordion-trigger"],
+    [data-slot="accordion-trigger-icon"],
+    [data-slot="accordion"]:where(
+        [data-variant="outline"],
+        [data-variant="filled"]
+      )
+      > [data-slot="accordion-item"] {
+      transition: none;
+    }
+  }
+}

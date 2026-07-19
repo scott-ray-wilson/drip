@@ -1,0 +1,86 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="kbd"] {
+    @apply inline-flex items-center justify-center min-w-5.5 h-5.5 px-1.5
+           rounded-sm bg-card border border-border text-muted-foreground
+           font-mono text-[11px] leading-none whitespace-nowrap align-middle
+           select-none;
+    border-bottom-width: 2px;
+    letter-spacing: 0.02em;
+    box-shadow:
+      0 1px 0 0 rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+  }
+  .dark [data-slot="kbd"] {
+    box-shadow:
+      0 1px 0 0 rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  }
+
+  /* --- Small (Size) ------------------------------------------------------- */
+  [data-slot="kbd"][data-size="sm"] {
+    @apply min-w-4.5 h-4.5 px-1 text-[10px] rounded-[3px];
+  }
+
+  /* --- Large (Size) ------------------------------------------------------- */
+  [data-slot="kbd"][data-size="lg"] {
+    @apply min-w-7 h-7 px-2 text-[13px] rounded-md;
+  }
+
+  /* --- Flat (Variant) ----------------------------------------------------- */
+  [data-slot="kbd"][data-variant="flat"] {
+    border-bottom-width: 1px;
+    box-shadow: none;
+  }
+
+  /* --- Ghost (Variant) ---------------------------------------------------- */
+  [data-slot="kbd"][data-variant="ghost"] {
+    @apply bg-transparent border-transparent text-foreground-subtle;
+    box-shadow: none;
+  }
+
+  /* --- Accent (Variant) --------------------------------------------------- */
+  [data-slot="kbd"][data-variant="accent"] {
+    @apply bg-accent/8 border-accent/30 text-accent;
+  }
+  .dark [data-slot="kbd"][data-variant="accent"] {
+    @apply bg-accent/10 border-accent/20 text-accent;
+  }
+
+  /* --- Combo -------------------------------------------------------------- */
+  [data-slot="kbd-combo"] {
+    @apply inline-flex items-center gap-1 align-middle;
+  }
+
+  /* --- Separator ---------------------------------------------------------- */
+  [data-slot="kbd-separator"] {
+    @apply font-mono text-xs text-foreground-subtle select-none;
+  }
+
+  /* --- Caption ------------------------------------------------------------ */
+  [data-slot="kbd-caption"] {
+    @apply font-mono text-[11px] text-foreground-subtle uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* --- Shortcut Row ------------------------------------------------------- */
+  [data-slot="kbd-row"] {
+    @apply flex items-center gap-3 px-3.5 py-2.5 bg-card border border-border
+           font-mono text-xs text-muted-foreground;
+  }
+  [data-slot="kbd-row"] + [data-slot="kbd-row"] {
+    @apply -mt-px rounded-none;
+  }
+  [data-slot="kbd-row"]:first-child {
+    @apply rounded-t-md;
+  }
+  [data-slot="kbd-row"]:last-child {
+    @apply rounded-b-md;
+  }
+  [data-slot="kbd-row"]:only-child {
+    @apply rounded-md;
+  }
+  [data-slot="kbd-row-label"] {
+    @apply text-foreground flex-1;
+  }
+}

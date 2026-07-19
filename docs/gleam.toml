@@ -1,19 +1,121 @@
 name = "docs"
+description = "The Drip documentation site, served at drip.pink."
 version = "1.0.0"
+target = "javascript"
 
-# Fill out these fields if you intend to generate HTML documentation or publish
-# your project to the Hex package manager.
-#
-# description = ""
-# licences = ["Apache-2.0"]
-# repository = { type = "github", user = "", repo = "" }
-# links = [{ title = "Website", href = "" }]
-#
-# For a full reference of all the available options, you can have a look at
-# https://gleam.run/writing-gleam/gleam-toml/.
+licences = ["MIT"]
+
+# Internal site: never published to Hex (see ../PUBLISHING.md).
 
 [dependencies]
+ui = { path = "../ui" }
+drip_registry = { path = "../registry" }
 gleam_stdlib = ">= 1.0.0 and < 2.0.0"
+lustre = ">= 5.7.0 and < 6.0.0"
+modem = ">= 2.1.3 and < 3.0.0"
+gleam_json = ">= 3.1.0 and < 4.0.0"
+contour = ">= 1.2.1 and < 2.0.0"
+swatch = ">= 1.0.0 and < 2.0.0"
 
 [dev_dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
+lustre_dev_tools = ">= 2.3.6 and < 3.0.0"
+birdie = ">= 2.0.1 and < 3.0.0"
+
+[tools.lustre.html]
+title = "Drip: UI Elements for Lustre You Own"
+
+[[tools.lustre.html.meta]]
+name = "description"
+content = "Elements for Lustre that land in your project as source. Built on native HTML, accessible by default, themeable through CSS variables, and yours to edit."
+
+[[tools.lustre.html.meta]]
+name = "theme-color"
+content = "#0b0f17"
+
+[[tools.lustre.html.meta]]
+name = "color-scheme"
+content = "dark light"
+
+[[tools.lustre.html.meta]]
+property = "og:type"
+content = "website"
+
+[[tools.lustre.html.meta]]
+property = "og:site_name"
+content = "Drip"
+
+[[tools.lustre.html.meta]]
+property = "og:url"
+content = "https://drip.pink"
+
+[[tools.lustre.html.meta]]
+property = "og:title"
+content = "Drip: UI Elements for Lustre You Own"
+
+[[tools.lustre.html.meta]]
+property = "og:description"
+content = "Elements for Lustre that land in your project as source. Built on native HTML, accessible by default, themeable through CSS variables, and yours to edit."
+
+[[tools.lustre.html.meta]]
+property = "og:image"
+content = "https://drip.pink/og-image.png"
+
+[[tools.lustre.html.meta]]
+property = "og:image:width"
+content = "1200"
+
+[[tools.lustre.html.meta]]
+property = "og:image:height"
+content = "630"
+
+[[tools.lustre.html.meta]]
+property = "og:image:alt"
+content = "Drip: UI elements for Lustre you own"
+
+[[tools.lustre.html.meta]]
+name = "twitter:card"
+content = "summary_large_image"
+
+[[tools.lustre.html.meta]]
+name = "twitter:title"
+content = "Drip: UI Elements for Lustre You Own"
+
+[[tools.lustre.html.meta]]
+name = "twitter:description"
+content = "Elements for Lustre that land in your project as source. Built on native HTML, accessible by default, themeable through CSS variables, and yours to edit."
+
+[[tools.lustre.html.meta]]
+name = "twitter:image"
+content = "https://drip.pink/og-image.png"
+
+[[tools.lustre.html.links]]
+rel = "preload"
+as = "font"
+type = "font/woff2"
+href = "/fonts/inter-variable.woff2"
+crossorigin = "anonymous"
+
+[[tools.lustre.html.links]]
+rel = "preload"
+as = "font"
+type = "font/woff2"
+href = "/fonts/jetbrains-mono-variable.woff2"
+crossorigin = "anonymous"
+
+[[tools.lustre.html.links]]
+rel = "icon"
+href = "/icon.svg"
+type = "image/svg+xml"
+
+[[tools.lustre.html.links]]
+rel = "icon"
+href = "/favicon.ico"
+sizes = "32x32"
+
+[[tools.lustre.html.links]]
+rel = "apple-touch-icon"
+href = "/apple-touch-icon.png"
+
+[[tools.lustre.html.scripts]]
+content = "var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light')document.documentElement.classList.add('dark')"

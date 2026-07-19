@@ -1,0 +1,337 @@
+---
+version: 2.0.1
+title: elements/checkbox.md
+---
+# Checkbox
+
+A control that toggles a single option on or off.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-fit")], [
+    checkbox.input([attribute.id("intro-terms"), attribute.checked(True)]),
+    field.label([attribute.for("intro-terms")], [
+      html.text("Accept terms of service"),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add checkbox
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import ui/checkbox
+
+pub fn view() -> Element(message) {
+  checkbox.input([])
+}
+```
+
+## Examples
+
+Set the state of a checkbox with modifier attributes, or compose it with field helpers.
+
+### Label
+
+Pair the checkbox with a horizontal field and label to extend the click target and announce the option.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-fit")], [
+    checkbox.input([attribute.id("notify"), attribute.checked(True)]),
+    field.label([attribute.for("notify")], [
+      html.text("Email me about updates"),
+    ]),
+  ])
+}
+```
+
+### Description
+
+Pair the checkbox with a field label and description to explain the option.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.root([field.horizontal(), attribute.class("w-fit max-w-sm")], [
+    checkbox.input([attribute.id("description-usage")]),
+    field.content([], [
+      field.label([attribute.for("description-usage")], [
+        html.text("Share usage data"),
+      ]),
+      field.description([], [
+        html.text("Help improve Drip by sending anonymous usage reports."),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Card
+
+Wrap the field in a label so the whole card toggles the checkbox.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.label([attribute.class("max-w-72")], [
+    field.root([field.horizontal()], [
+      checkbox.input([attribute.checked(True)]),
+      field.content([], [
+        field.title([], [html.text("Enable notifications")]),
+        field.description([], [
+          html.text("You can enable or disable notifications at any time."),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Group
+
+Wrap related checkboxes in a set so screen readers announce them as a single group.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.set([attribute.class("w-72")], [
+    field.legend_label([], [html.text("Email preferences")]),
+    field.description([], [
+      html.text("Choose which updates Drip sends to your inbox."),
+    ]),
+    field.group([], [
+      field.root([field.horizontal()], [
+        checkbox.input([
+          attribute.id("group-product"),
+          attribute.checked(True),
+        ]),
+        field.label([attribute.for("group-product")], [
+          html.text("Product updates"),
+        ]),
+      ]),
+      field.root([field.horizontal()], [
+        checkbox.input([
+          attribute.id("group-security"),
+          attribute.checked(True),
+        ]),
+        field.label([attribute.for("group-security")], [
+          html.text("Security alerts"),
+        ]),
+      ]),
+      field.root([field.horizontal()], [
+        checkbox.input([attribute.id("group-newsletter")]),
+        field.label([attribute.for("group-newsletter")], [
+          html.text("Weekly newsletter"),
+        ]),
+      ]),
+      field.root([field.horizontal()], [
+        checkbox.input([attribute.id("group-offers")]),
+        field.label([attribute.for("group-offers")], [
+          html.text("Partner offers"),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Invalid
+
+Set aria-invalid with a field error to surface validation errors.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-fit")], [
+    field.root([field.horizontal()], [
+      checkbox.input([
+        attribute.id("agree-eula"),
+        attribute.aria_invalid("true"),
+      ]),
+      field.label([attribute.for("agree-eula")], [
+        html.text("I agree to the EULA"),
+      ]),
+    ]),
+    field.error([], [html.text("You must accept to continue.")]),
+  ])
+}
+```
+
+### Disabled
+
+Pass the disabled attribute to prevent interaction and remove the checkbox from the focus order.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/field
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-fit")], [
+    field.root([field.horizontal()], [
+      checkbox.input([
+        attribute.id("disabled-sync"),
+        attribute.disabled(True),
+      ]),
+      field.label([attribute.for("disabled-sync")], [
+        html.text("Sync across devices"),
+      ]),
+    ]),
+    field.root([field.horizontal()], [
+      checkbox.input([
+        attribute.id("disabled-backup"),
+        attribute.disabled(True),
+        attribute.checked(True),
+      ]),
+      field.label([attribute.for("disabled-backup")], [
+        html.text("Back up automatically"),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Table
+
+Place a checkbox in each row's leading cell to toggle selection.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/checkbox
+import ui/table
+
+pub fn view() -> Element(message) {
+  table.root([], [
+    table.header([], [
+      table.row([], [
+        table.head([], [
+          checkbox.input([attribute.aria_label("Select all rows")]),
+        ]),
+        table.head([], [html.text("Workspace")]),
+        table.head([], [html.text("Plan")]),
+        table.head([], [html.text("Members")]),
+      ]),
+    ]),
+    table.body([], [
+      table.row([], [
+        table.cell([], [checkbox.input([attribute.aria_label("Select Drip")])]),
+        table.cell([], [html.text("Drip")]),
+        table.cell([], [html.text("Pro")]),
+        table.cell([], [html.text("12")]),
+      ]),
+      table.row([attribute.data("state", "selected")], [
+        table.cell([], [
+          checkbox.input([
+            attribute.aria_label("Select Acme Labs"),
+            attribute.checked(True),
+          ]),
+        ]),
+        table.cell([], [html.text("Acme Labs")]),
+        table.cell([], [html.text("Enterprise")]),
+        table.cell([], [html.text("48")]),
+      ]),
+      table.row([], [
+        table.cell([], [
+          checkbox.input([attribute.aria_label("Select Personal")]),
+        ]),
+        table.cell([], [html.text("Personal")]),
+        table.cell([], [html.text("Free")]),
+        table.cell([], [html.text("1")]),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+A single element wrapping a native input.
+
+| Element | Description |
+| --- | --- |
+| `checkbox.input(attrs)` | Renders the native input with a layered check indicator. |
+
+### Attributes
+
+Standard Lustre attributes the checkbox responds to. Pass them through the input's attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.checked(True)` | Renders the filled surface and check glyph. |
+| `attribute.disabled(True)` | Locks the checkbox, dims it, and removes it from the focus order. |
+| `attribute.required(True)` | Marks the checkbox as required and reveals the field label's indicator. |
+| `attribute.aria_invalid("true")` | Surfaces the destructive border and ring on validation failure. |
+
+### Selectors
+
+CSS selectors stamped on the checkbox's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="checkbox"]` | The root container wrapping the input. |
+| `[data-slot="checkbox"] > input` | The native input control. |
+| `[data-slot="checkbox"] > input:checked` | The input in its checked state. |
+| `[data-slot="checkbox"] > input:disabled` | The input when locked. |
+| `[data-slot="checkbox"] > input[aria-invalid="true"]` | The input flagged with a validation failure. |
+| `[data-slot="checkbox-indicator"]` | The check icon layered over the input. |
+
+## Accessibility
+
+**Native semantics, keyboard ready.** Renders a native `<input type="checkbox">`, so the browser handles toggling, focus, and form submission. Pair every checkbox with a field label so screen readers announce the option, and group related checkboxes inside a field set with a legend to bind a heading to the set.
+
+### Keyboard
+
+| Key | Action |
+| --- | --- |
+| Tab | Move focus to the checkbox. |
+| Shift + Tab | Move focus to the previous focusable element. |
+| Space | Toggle the checked state. |
+

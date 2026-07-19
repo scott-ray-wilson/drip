@@ -1,0 +1,29 @@
+---
+version: 2.0.1
+title: elements.md
+---
+# Elements
+
+The element catalog. Each element themes through the same CSS
+variables and vendors into your project with a single CLI command. Pick one to
+read its docs.
+
+- [Accordion](https://drip.pink/elements/accordion.md): A set of interactive headings that reveal or hide a section of content.
+- [Alert](https://drip.pink/elements/alert.md): An inline callout that surfaces an important message.
+- [Button](https://drip.pink/elements/button.md): An interactive control that triggers an action, submits a form, or resets it.
+- [Button Group](https://drip.pink/elements/button-group.md): A row or column of related buttons joined into a single semantic unit.
+- [Card](https://drip.pink/elements/card.md): A surface that groups related content and actions into a contained block.
+- [Checkbox](https://drip.pink/elements/checkbox.md): A control that toggles a single option on or off.
+- [Empty](https://drip.pink/elements/empty.md): A composable empty state for surfaces with nothing to show.
+- [Field](https://drip.pink/elements/field.md): A layout that pairs a form control with its label, description, and message.
+- [Radio Group](https://drip.pink/elements/radio-group.md): A set of mutually exclusive options sharing a single name.
+- [Separator](https://drip.pink/elements/separator.md): A thin divider for visually separating content.
+- [Spinner](https://drip.pink/elements/spinner.md): An indeterminate loading indicator for pending states.
+- [Switch](https://drip.pink/elements/switch.md): A binary toggle for settings that take effect immediately.
+- [Table](https://drip.pink/elements/table.md): A semantic data table for displaying rows of structured information.
+- [Text Area](https://drip.pink/elements/text-area.md): A multi-line text input that auto-grows with longer content.
+- [Text Field](https://drip.pink/elements/text-field.md): A single-line text input for short, free-form values.
+
+More elements on the way. The registry is still growing. Check back soon
+for new elements to drop into your project.
+

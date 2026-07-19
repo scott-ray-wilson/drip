@@ -1,0 +1,151 @@
+@layer components {
+  /* --- Content ------------------------------------------------------------ */
+  [data-slot="dropdown-menu-content"] {
+    @apply fixed top-0 left-0 z-50 min-w-48 max-w-80 overflow-x-hidden
+           overflow-y-auto rounded-md border border-border bg-elevated p-1
+           text-sm text-elevated-foreground shadow-md pointer-events-none
+           invisible opacity-0 scale-95
+           transition-[opacity,scale,translate,visibility] duration-[180ms]
+           ease-out-soft;
+  }
+
+  /* --- Content Origin + Entry Slide (Per Side) ---------------------------- */
+  [data-slot="dropdown-menu-content"]:not([data-side]),
+  [data-slot="dropdown-menu-content"][data-side="bottom"] {
+    @apply origin-top -translate-y-1;
+  }
+  [data-slot="dropdown-menu-content"][data-side="top"] {
+    @apply origin-bottom translate-y-1;
+  }
+  [data-slot="dropdown-menu-content"][data-side="left"] {
+    @apply origin-right translate-x-1;
+  }
+  [data-slot="dropdown-menu-content"][data-side="right"] {
+    @apply origin-left -translate-x-1;
+  }
+
+  /* --- Content Open State ------------------------------------------------- */
+  [data-slot="dropdown-menu-content"][data-state="open"] {
+    @apply pointer-events-auto visible opacity-100 scale-100 translate-x-0
+           translate-y-0;
+  }
+
+  /* --- Scrollbar ---------------------------------------------------------- */
+  [data-slot="dropdown-menu-content"] {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  [data-slot="dropdown-menu-content"]::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-width);
+  }
+  [data-slot="dropdown-menu-content"]::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  [data-slot="dropdown-menu-content"]::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: var(--scrollbar-radius);
+  }
+
+  /* --- Group -------------------------------------------------------------- */
+  [data-slot="dropdown-menu-group"] {
+    @apply contents;
+  }
+
+  /* --- Item (Base) -------------------------------------------------------- */
+  [data-slot="dropdown-menu-item"] {
+    @apply relative flex w-full cursor-pointer items-center gap-2.5 rounded-sm
+           border-0 bg-transparent px-2 py-1.5 text-left text-sm
+           text-elevated-foreground outline-hidden select-none
+           transition-colors duration-200 ease-out-soft;
+  }
+  [data-slot="dropdown-menu-item"] > svg {
+    @apply pointer-events-none shrink-0 text-muted-foreground;
+  }
+  [data-slot="dropdown-menu-item"] > svg:not([class*="size-"]) {
+    @apply size-4;
+  }
+  [data-slot="dropdown-menu-item"]:disabled,
+  [data-slot="dropdown-menu-item"][data-disabled],
+  [data-slot="dropdown-menu-item"][aria-disabled="true"] {
+    @apply pointer-events-none cursor-not-allowed text-foreground-subtle;
+  }
+  [data-slot="dropdown-menu-item"]:disabled > svg,
+  [data-slot="dropdown-menu-item"][data-disabled] > svg,
+  [data-slot="dropdown-menu-item"][aria-disabled="true"] > svg {
+    @apply opacity-50;
+  }
+
+  /* --- Default (Variant) -------------------------------------------------- */
+  [data-slot="dropdown-menu-item"][data-variant="default"]:hover,
+  [data-slot="dropdown-menu-item"][data-variant="default"]:focus-visible {
+    @apply bg-foreground/5;
+  }
+
+  /* --- Active (State) ----------------------------------------------------- */
+  [data-slot="dropdown-menu-item"][data-variant="default"][data-active="true"] {
+    @apply bg-accent/10;
+  }
+  [data-slot="dropdown-menu-item"][data-variant="default"][data-active="true"]::before {
+    content: "";
+    @apply absolute left-0 top-1 bottom-1 w-0.5 rounded-xs bg-accent;
+  }
+  [data-slot="dropdown-menu-item"][data-variant="default"][data-active="true"]
+    > svg {
+    @apply text-accent;
+  }
+
+  /* --- Destructive (Variant) ---------------------------------------------- */
+  [data-slot="dropdown-menu-item"][data-variant="destructive"] {
+    @apply text-destructive;
+  }
+  [data-slot="dropdown-menu-item"][data-variant="destructive"] > svg {
+    @apply text-current;
+  }
+  [data-slot="dropdown-menu-item"][data-variant="destructive"]:hover,
+  [data-slot="dropdown-menu-item"][data-variant="destructive"]:focus-visible {
+    @apply bg-destructive/18.5;
+  }
+
+  /* --- Label -------------------------------------------------------------- */
+  [data-slot="dropdown-menu-label"] {
+    @apply px-2 pt-2 pb-1 font-mono text-2xs font-medium uppercase
+          text-foreground-subtle;
+  }
+
+  /* --- Separator ---------------------------------------------------------- */
+  [data-slot="dropdown-menu-separator"] {
+    @apply my-1 h-px border-0 bg-border;
+  }
+
+  /* --- Shortcut ----------------------------------------------------------- */
+  [data-slot="dropdown-menu-shortcut"] {
+    @apply ml-auto inline-flex items-center rounded-[3px] border border-border
+           bg-transparent px-[5px] py-px font-mono text-[10px]
+           tracking-[0.06em] text-foreground-subtle;
+  }
+  [data-slot="dropdown-menu-item"][data-variant="default"]:hover
+    [data-slot="dropdown-menu-shortcut"],
+  [data-slot="dropdown-menu-item"][data-variant="default"]:focus-visible
+    [data-slot="dropdown-menu-shortcut"] {
+    @apply border-border-strong text-muted-foreground;
+  }
+  [data-slot="dropdown-menu-item"][data-variant="default"][data-active="true"]
+    [data-slot="dropdown-menu-shortcut"] {
+    @apply border-accent/30 text-accent;
+  }
+  [data-slot="dropdown-menu-item"][data-variant="destructive"]:hover
+    [data-slot="dropdown-menu-shortcut"],
+  [data-slot="dropdown-menu-item"][data-variant="destructive"]:focus-visible
+    [data-slot="dropdown-menu-shortcut"] {
+    @apply border-destructive/30 text-current;
+  }
+
+  /* --- Reduced Motion ----------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-item"] {
+      transition: none;
+    }
+  }
+}

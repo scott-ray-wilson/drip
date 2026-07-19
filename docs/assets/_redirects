@@ -1,0 +1,5 @@
+# Cloudflare Pages SPA fallback: serve index.html (200) for client-side routes
+# like /elements/button. Real files (/elements/button.md, /docs.js, /docs.css,
+# /fonts/*, /img/*) are served directly — this rule only applies when no static
+# asset matches the request.
+/*  /index.html  200

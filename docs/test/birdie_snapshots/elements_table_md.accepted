@@ -1,0 +1,257 @@
+---
+version: 2.0.1
+title: elements/table.md
+---
+# Table
+
+A semantic data table for displaying rows of structured information.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/table
+
+pub fn view() -> Element(message) {
+  table.root([], [
+    table.header([], [
+      table.row([], [
+        table.head([], [html.text("Deployment")]),
+        table.head([], [html.text("Status")]),
+        table.head([], [html.text("Region")]),
+        table.head([], [html.text("Updated")]),
+      ]),
+    ]),
+    table.body([], [
+      table.row([], [
+        table.cell([attribute.class("font-mono text-foreground")], [
+          html.text("dpl_8d4f1a2c"),
+        ]),
+        table.cell([], [html.text("Live")]),
+        table.cell([], [html.text("iad1")]),
+        table.cell([], [html.text("2 min ago")]),
+      ]),
+      table.row([], [
+        table.cell([attribute.class("font-mono text-foreground")], [
+          html.text("dpl_47c91be0"),
+        ]),
+        table.cell([], [html.text("Building")]),
+        table.cell([], [html.text("sfo1")]),
+        table.cell([], [html.text("12 min ago")]),
+      ]),
+      table.row([], [
+        table.cell([attribute.class("font-mono text-foreground")], [
+          html.text("dpl_19ae33df"),
+        ]),
+        table.cell([], [html.text("Live")]),
+        table.cell([], [html.text("fra1")]),
+        table.cell([], [html.text("1 hr ago")]),
+      ]),
+      table.row([], [
+        table.cell([attribute.class("font-mono text-foreground")], [
+          html.text("dpl_22bb70a5"),
+        ]),
+        table.cell([], [html.text("Failed")]),
+        table.cell([], [html.text("sin1")]),
+        table.cell([], [html.text("3 hr ago")]),
+      ]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add table
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/table
+
+pub fn view() -> Element(message) {
+  table.root([], [
+    table.header([], [table.row([], [table.head([], [html.text("Column")])])]),
+    table.body([], [table.row([], [table.cell([], [html.text("Value")])])]),
+  ])
+}
+```
+
+## Examples
+
+Mark rows as selected, anchor totals in a footer, or summarize the table with a caption.
+
+### Selected
+
+Set data-state="selected" to mark a row as selected.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/table
+
+pub fn view() -> Element(message) {
+  table.root([], [
+    table.header([], [
+      table.row([], [
+        table.head([], [html.text("Workspace")]),
+        table.head([], [html.text("Plan")]),
+        table.head([], [html.text("Members")]),
+      ]),
+    ]),
+    table.body([], [
+      table.row([], [
+        table.cell([], [html.text("Drip")]),
+        table.cell([], [html.text("Pro")]),
+        table.cell([], [html.text("12")]),
+      ]),
+      table.row([attribute.data("state", "selected")], [
+        table.cell([], [html.text("Acme Labs")]),
+        table.cell([], [html.text("Enterprise")]),
+        table.cell([], [html.text("48")]),
+      ]),
+      table.row([], [
+        table.cell([], [html.text("Personal")]),
+        table.cell([], [html.text("Free")]),
+        table.cell([], [html.text("1")]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Footer
+
+Add a footer to anchor totals or summary metadata beneath the body.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/table
+
+pub fn view() -> Element(message) {
+  table.root([], [
+    table.header([], [
+      table.row([], [
+        table.head([], [html.text("Invoice")]),
+        table.head([], [html.text("Issued")]),
+        table.head([], [html.text("Amount")]),
+      ]),
+    ]),
+    table.body([], [
+      table.row([], [
+        table.cell([], [html.text("INV-001")]),
+        table.cell([], [html.text("Apr 2026")]),
+        table.cell([], [html.text("$1,200.00")]),
+      ]),
+      table.row([], [
+        table.cell([], [html.text("INV-002")]),
+        table.cell([], [html.text("Mar 2026")]),
+        table.cell([], [html.text("$980.00")]),
+      ]),
+      table.row([], [
+        table.cell([], [html.text("INV-003")]),
+        table.cell([], [html.text("Feb 2026")]),
+        table.cell([], [html.text("$640.00")]),
+      ]),
+    ]),
+    table.footer([], [
+      table.row([], [
+        table.cell([attribute.colspan(2)], [html.text("Total")]),
+        table.cell([], [html.text("$2,820.00")]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Caption
+
+Add a caption to summarize the table for screen readers and sighted users alike.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/table
+
+pub fn view() -> Element(message) {
+  table.root([], [
+    table.caption([], [html.text("A list of recent design tokens.")]),
+    table.header([], [
+      table.row([], [
+        table.head([], [html.text("Token")]),
+        table.head([], [html.text("Value")]),
+      ]),
+    ]),
+    table.body([], [
+      table.row([], [
+        table.cell([], [html.text("--accent")]),
+        table.cell([], [html.text("oklch(0.78 0.18 350)")]),
+      ]),
+      table.row([], [
+        table.cell([], [html.text("--border")]),
+        table.cell([], [html.text("oklch(0.30 0.02 264)")]),
+      ]),
+      table.row([], [
+        table.cell([], [html.text("--radius")]),
+        table.cell([], [html.text("2px")]),
+      ]),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+The root constructor plus the elements that compose its body. Each takes a list of attributes and a list of children.
+
+| Element | Description |
+| --- | --- |
+| `table.root(attrs, children)` | Root table wrapped in a horizontally scrollable container. |
+| `table.header(attrs, children)` | Header section. Carries the muted surface tint. |
+| `table.body(attrs, children)` | Body section. Holds the data rows. |
+| `table.footer(attrs, children)` | Footer section. Used for totals or summary rows. |
+| `table.row(attrs, children)` | Row. Body rows highlight on hover and support a selected data state. |
+| `table.head(attrs, children)` | Header cell. Uppercase, tracked, muted. |
+| `table.cell(attrs, children)` | Data cell for body and footer rows. |
+| `table.caption(attrs, children)` | Optional summary. First child of the table, rendered beneath it. |
+
+### Attributes
+
+Standard Lustre attributes a table row responds to. Pass them through the attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.data("state", "selected")` | Marks the row as selected with a persistent muted fill. |
+
+### Selectors
+
+CSS selectors stamped on the table's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="table-container"]` | The horizontally scrollable wrapper around the table. |
+| `[data-slot="table"]` | The root table element. |
+| `[data-slot="table-header"]` | The thead section. |
+| `[data-slot="table-body"]` | The tbody section. |
+| `[data-slot="table-footer"]` | The tfoot section. |
+| `[data-slot="table-row"]` | Each row (the tr element). |
+| `[data-slot="table-row"][data-state="selected"]` | A row marked as selected. |
+| `[data-slot="table-head"]` | Each header cell (the th element). |
+| `[data-slot="table-cell"]` | Each data cell (the td element). |
+| `[data-slot="table-caption"]` | The caption rendered beneath the table. |
+
+## Accessibility
+
+**Native semantics, screen-reader friendly.** Renders as native `<table>`, `<thead>`, `<tbody>`, and `<tfoot>` markup so assistive tech announces row and column position out of the box. Pair with a `<caption>` to summarize the table's purpose.
+

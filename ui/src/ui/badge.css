@@ -1,0 +1,72 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="badge"] {
+    @apply inline-flex items-center gap-1 px-1.5 h-5 rounded-md
+           text-[10px] leading-[15px] tracking-[0.1em] uppercase font-mono
+           font-medium border whitespace-nowrap
+           transition-[background-color,border-color,color,box-shadow]
+           duration-200 ease-out-soft;
+  }
+
+  /* --- Child SVGs --------------------------------------------------------- */
+  [data-slot="badge"] svg {
+    @apply pointer-events-none size-3;
+  }
+
+  /* --- Neutral (Default Variant) ------------------------------------------ */
+  [data-slot="badge"]:not([data-variant]),
+  [data-slot="badge"][data-variant="neutral"] {
+    @apply bg-card border-border text-muted-foreground;
+  }
+
+  /* --- Accent (Variant) --------------------------------------------------- */
+  [data-slot="badge"][data-variant="accent"] {
+    @apply bg-accent/10 border-accent/25 text-accent;
+  }
+
+  /* --- Info (Variant) ----------------------------------------------------- */
+  [data-slot="badge"][data-variant="info"] {
+    @apply bg-info/10 border-info/25 text-info;
+  }
+
+  /* --- Success (Variant) -------------------------------------------------- */
+  [data-slot="badge"][data-variant="success"] {
+    @apply bg-success/10 border-success/25 text-success;
+  }
+
+  /* --- Warning (Variant) -------------------------------------------------- */
+  [data-slot="badge"][data-variant="warning"] {
+    @apply bg-warning/10 border-warning/25 text-warning;
+  }
+
+  /* --- Error (Variant) ---------------------------------------------------- */
+  [data-slot="badge"][data-variant="error"] {
+    @apply bg-error/10 border-error/25 text-error;
+  }
+
+  /* --- Outline (Variant) -------------------------------------------------- */
+  [data-slot="badge"][data-variant="outline"] {
+    @apply bg-transparent border-border text-foreground;
+  }
+
+  /* --- Small (Size) ------------------------------------------------------- */
+  [data-slot="badge"][data-size="sm"] {
+    @apply h-auto gap-0.5 px-[5px] py-px text-[9px] leading-[13px] tracking-[0.1em];
+  }
+  [data-slot="badge"][data-size="sm"] svg {
+    @apply size-2.5;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+  [data-slot="badge"]:focus-visible {
+    @apply outline;
+  }
+  [data-slot="badge"][aria-invalid="true"] {
+    @apply border-error ring-error/40 ring-2;
+  }
+  /* Invalid + focused: drop the ring (it tints the translucent focus
+     outline); the error border keeps the state visible. */
+  [data-slot="badge"][aria-invalid="true"]:focus-visible {
+    @apply ring-0;
+  }
+}

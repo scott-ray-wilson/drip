@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Sunrise over layered mountain ridges">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f9a8d4" />
+      <stop offset="0.4" stop-color="#fbcfa6" />
+      <stop offset="1" stop-color="#fde8c4" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.62" r="0.55">
+      <stop offset="0" stop-color="#fff7ed" />
+      <stop offset="0.55" stop-color="#fdba74" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#fdba74" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#sky)" />
+  <circle cx="320" cy="222" r="150" fill="url(#glow)" />
+  <circle cx="320" cy="214" r="48" fill="#fff3df" />
+  <path d="M0 246 L132 192 L246 244 L368 182 L482 236 L640 190 L640 360 L0 360 Z" fill="#d18aa3" opacity="0.5" />
+  <path d="M0 296 L156 232 L300 292 L432 238 L560 296 L640 258 L640 360 L0 360 Z" fill="#9a4f6e" opacity="0.72" />
+  <path d="M0 330 L188 288 L344 334 L520 294 L640 328 L640 360 L0 360 Z" fill="#5c2c44" />
+</svg>

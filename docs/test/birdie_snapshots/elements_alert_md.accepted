@@ -1,0 +1,337 @@
+---
+version: 2.0.1
+title: elements/alert.md
+---
+# Alert
+
+An inline callout that surfaces an important message.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.info(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.info([])]),
+    alert.title([], [html.text("New version available")]),
+    alert.description([], [
+      html.text("Update now to pick up the latest elements and fixes."),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add alert
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.info()], [
+    alert.icon([], [icon.info([])]),
+    alert.title([], [html.text("Heads up")]),
+    alert.description([], [html.text("Something to note.")]),
+    alert.close([], [icon.x([])]),
+  ])
+}
+```
+
+## Variants
+
+Six semantic variants, each pairing an accent color with an icon slot to convey intent at a glance.
+
+### Info
+
+Informative. The lowest-urgency signal in the set.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.info(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.info([])]),
+    alert.title([], [html.text("Heads up")]),
+    alert.description([], [
+      html.text("This action is reversible for the next 24 hours."),
+    ]),
+  ])
+}
+```
+
+### Success
+
+Affirmative. Signals that something completed.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.success(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.circle_check([])]),
+    alert.title([], [html.text("Webhook verified")]),
+    alert.description([], [
+      html.text("We received a 200 from your endpoint within 80ms."),
+    ]),
+  ])
+}
+```
+
+### Warning
+
+Cautionary. Heightened priority, one step short of failure.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.warning(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.triangle_alert([])]),
+    alert.title([], [html.text("Approaching rate limit")]),
+    alert.description([], [
+      html.text("You've used 87% of this hour's request budget."),
+    ]),
+  ])
+}
+```
+
+### Error
+
+Failure. The highest-urgency signal in the set.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.error(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.circle_x([])]),
+    alert.title([], [html.text("Deployment failed")]),
+    alert.description([], [
+      html.text("Build #2413 exited with status 1. Check the logs for details."),
+    ]),
+  ])
+}
+```
+
+### Accent
+
+Promotional. The brand-forward variant.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.accent(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.sparkles([])]),
+    alert.title([], [html.text("Theme it your way")]),
+    alert.description([], [
+      html.text(
+        "Every element ships with CSS variables. Swap palettes, radius, and
+        motion without touching markup. ",
+      ),
+      html.a([attribute.href("#"), attribute.class("text-accent")], [
+        html.text("Learn more"),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Neutral
+
+Subdued. Carries a message without coloring its intent.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.neutral(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.book_open_text([])]),
+    alert.title([], [html.text("Tip")]),
+    alert.description([], [
+      html.text(
+        "Prefer composing variants over building one-off alerts;
+        every slot here is part of the public API.",
+      ),
+    ]),
+  ])
+}
+```
+
+## Examples
+
+Extend an alert with inline actions, a close button, or a full-width banner.
+
+### Actions
+
+Anchor inline buttons under the description with the actions slot.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/button
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.error(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.circle_x([])]),
+    alert.title([], [html.text("Deployment failed")]),
+    alert.description([], [
+      html.text("Build #2413 exited with status 1. Check the logs for details."),
+    ]),
+    alert.actions([], [
+      button.button([button.primary(), button.sm()], [
+        html.text("View logs"),
+      ]),
+      button.button([button.destructive(), button.sm()], [
+        html.text("Rollback"),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Dismissible
+
+Add a close button via the close slot.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.info(), attribute.class("w-full max-w-lg")], [
+    alert.icon([], [icon.info([])]),
+    alert.title([], [html.text("Preview mode")]),
+    alert.description([], [
+      html.text("Changes stay local until you publish this draft."),
+    ]),
+    alert.close([], [icon.x([])]),
+  ])
+}
+```
+
+### Banner
+
+Use the banner attribute for app-level system messages.
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/alert
+import ui/icon
+
+pub fn view() -> Element(message) {
+  alert.root([alert.warning(), alert.banner()], [
+    alert.icon([], [icon.triangle_alert([])]),
+    alert.title([], [html.text("Scheduled maintenance window")]),
+    alert.description([], [
+      html.text(
+        "eu-west-1 will be offline 02:00–02:30 UTC on
+        May 2 for planned database migration.",
+      ),
+    ]),
+    alert.close([], [icon.x([])]),
+  ])
+}
+```
+
+## API Reference
+
+### Variants
+
+Six variant attributes, one per semantic intent. Pass one into the root's attribute list.
+
+| Variant | Description |
+| --- | --- |
+| `alert.info()` | Informational note for non-urgent messages. |
+| `alert.success()` | Positive confirmation for a completed action. |
+| `alert.warning()` | Caution required, not yet failing. |
+| `alert.error()` | A failure that requires user attention. |
+| `alert.accent()` | Brand-aligned promotional alert for feature announcements. |
+| `alert.neutral()` | The default quiet surface for in-doc callouts and tips. |
+
+### Elements
+
+The root container and the composable child elements that fill its regions.
+
+| Element | Description |
+| --- | --- |
+| `alert.root(attrs, children)` | The root container. Holds the slots and carries the variant attribute. |
+| `alert.icon(attrs, children)` | Leading icon tile. Inherits color and background from variant. |
+| `alert.title(attrs, children)` | Short, bold heading for the alert. |
+| `alert.description(attrs, children)` | Supporting text under the title. |
+| `alert.actions(attrs, children)` | Trailing element under the description for inline action buttons. |
+| `alert.close(attrs, children)` | Trailing close button for dismissible alerts. |
+
+### Attributes
+
+Pass these into the root's attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `alert.banner()` | Squares the corners and keeps only the bottom border so the alert spans its container edge-to-edge. |
+| `attribute.role("status")` | Announces info and success alerts politely when they're inserted dynamically. |
+| `attribute.role("alert")` | Announces warning and error alerts assertively, interrupting the current utterance. |
+
+### Selectors
+
+CSS selectors stamped on the alert's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="alert"]` | The root container. |
+| `[data-variant="info\|success\|..."]` | The root, tagged with its active semantic variant. |
+| `[data-style="banner"]` | The root, tagged when the banner attribute is applied. |
+| `[data-slot="alert-icon"]` | Leading icon tile. |
+| `[data-slot="alert-title"]` | Heading inside the alert. |
+| `[data-slot="alert-description"]` | Supporting text inside the alert. |
+| `[data-slot="alert-actions"]` | Trailing row of inline action buttons. |
+| `[data-slot="alert-close"]` | Trailing close button. |
+
+## Accessibility
+
+**Opt-in live-region roles.** Alerts ship without a live-region role, so announcements are up to you. Add role="alert" to errors and warnings to interrupt the screen reader as soon as the alert appears, or role="status" to info and success to announce politely after the current utterance. Leave neutral and accent role-free unless they carry something worth announcing.
+

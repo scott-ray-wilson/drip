@@ -1,0 +1,53 @@
+@layer components {
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="radio-group"] {
+    @apply grid gap-2;
+  }
+
+  /* --- Item --------------------------------------------------------------- */
+  [data-slot="radio-group-item"] {
+    @apply relative inline-flex shrink-0 items-center align-middle;
+  }
+
+  /* --- Input -------------------------------------------------------------- */
+  [data-slot="radio-group-item"] > input {
+    @apply m-0 size-4 shrink-0 cursor-pointer appearance-none rounded-full
+           border border-border bg-input
+           transition-[background-color,border-color,color,box-shadow]
+           duration-200 ease-out-soft;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+  [data-slot="radio-group-item"] > input:checked {
+    @apply border-primary bg-primary;
+  }
+  [data-slot="radio-group-item"] > input:focus-visible {
+    @apply outline-2 outline-offset-0 border-outline!;
+  }
+  [data-slot="radio-group-item"] > input:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+  [data-slot="radio-group-item"] > input[aria-invalid="true"] {
+    @apply border-error ring-error/40 ring-2;
+  }
+  [data-slot="radio-group-item"] > input[aria-invalid="true"]:checked {
+    @apply border-error;
+  }
+  /* Invalid + focused: drop the ring (it tints the translucent focus
+     outline); the error border keeps the state visible. */
+  [data-slot="radio-group-item"] > input[aria-invalid="true"]:focus-visible {
+    @apply ring-0 border-error!;
+  }
+
+  /* --- Indicator (Dot) ---------------------------------------------------- */
+  [data-slot="radio-group-indicator"] {
+    @apply pointer-events-none absolute top-1/2 left-1/2 size-2
+           -translate-x-1/2 -translate-y-1/2 rounded-full
+           bg-primary-foreground opacity-0 transition-opacity
+           duration-200 ease-out-soft;
+  }
+  [data-slot="radio-group-item"]:has(> input:checked)
+    > [data-slot="radio-group-indicator"] {
+    @apply opacity-100;
+  }
+}

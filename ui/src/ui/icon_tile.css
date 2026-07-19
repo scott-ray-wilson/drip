@@ -1,0 +1,59 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="icon-tile"] {
+    @apply inline-flex items-center justify-center rounded-sm border size-8;
+  }
+
+  /* --- Child SVGs --------------------------------------------------------- */
+  [data-slot="icon-tile"] > svg {
+    @apply pointer-events-none shrink-0 size-4;
+  }
+
+  /* --- Small (Size) ------------------------------------------------------- */
+  [data-slot="icon-tile"][data-size="sm"] {
+    @apply size-7;
+  }
+  [data-slot="icon-tile"][data-size="sm"] > svg {
+    @apply size-3.5;
+  }
+
+  /* --- Large (Size) ------------------------------------------------------- */
+  [data-slot="icon-tile"][data-size="lg"] {
+    @apply size-9;
+  }
+  [data-slot="icon-tile"][data-size="lg"] > svg {
+    @apply size-5;
+  }
+
+  /* --- Accent (Default Variant) ------------------------------------------- */
+  [data-slot="icon-tile"]:not([data-variant]),
+  [data-slot="icon-tile"][data-variant="accent"] {
+    @apply bg-accent/10 border-accent/20 text-accent;
+  }
+
+  /* --- Info (Variant) ----------------------------------------------------- */
+  [data-slot="icon-tile"][data-variant="info"] {
+    @apply bg-info/10 border-info/20 text-info;
+  }
+
+  /* --- Success (Variant) -------------------------------------------------- */
+  [data-slot="icon-tile"][data-variant="success"] {
+    @apply bg-success/10 border-success/20 text-success;
+  }
+
+  /* --- Warning (Variant) -------------------------------------------------- */
+  [data-slot="icon-tile"][data-variant="warning"] {
+    @apply bg-warning/10 border-warning/20 text-warning;
+  }
+
+  /* --- Error (Variant) ---------------------------------------------------- */
+  [data-slot="icon-tile"][data-variant="error"] {
+    @apply bg-error/10 border-error/20 text-error;
+  }
+
+  /* --- Card Composition --------------------------------------------------- */
+  /* A card title that follows a tile steps down clear of it. */
+  [data-slot="icon-tile"] ~ [data-slot="card-title"] {
+    @apply mt-3;
+  }
+}

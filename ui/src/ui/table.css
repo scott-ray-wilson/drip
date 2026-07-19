@@ -1,0 +1,65 @@
+@layer components {
+  /* --- Container ---------------------------------------------------------- */
+  [data-slot="table-container"] {
+    @apply relative w-full overflow-x-auto;
+  }
+
+  /* --- Table -------------------------------------------------------------- */
+  [data-slot="table"] {
+    @apply w-full border-collapse text-sm caption-bottom;
+  }
+  /* No outer border, so the last row drops its bottom border. A caption
+     keeps it to separate the rows from the caption below. */
+  [data-slot="table"]:not(:has(> [data-slot="table-caption"]))
+    tr:last-child > td {
+    @apply border-b-0;
+  }
+
+  /* --- Header ------------------------------------------------------------- */
+  [data-slot="table-header"] {
+    @apply bg-muted/50;
+  }
+
+  /* --- Footer ------------------------------------------------------------- */
+  [data-slot="table-footer"] {
+    @apply border-t border-border bg-muted/50 font-medium;
+  }
+
+  /* --- Row ---------------------------------------------------------------- */
+  [data-slot="table-row"] {
+    @apply transition-colors duration-200 ease-out-soft;
+  }
+  /* Hover skips selected rows: its higher specificity would otherwise
+     repaint them with the lighter hover tint. */
+  [data-slot="table-body"]
+    > [data-slot="table-row"]:not([data-state="selected"]):hover {
+    @apply bg-muted/35;
+  }
+  [data-slot="table-row"][data-state="selected"] {
+    @apply bg-muted/60;
+  }
+
+  /* --- Head Cell ---------------------------------------------------------- */
+  [data-slot="table-head"] {
+    @apply text-2xs font-medium uppercase tracking-wider
+           text-foreground-subtle py-3 px-5 text-left whitespace-nowrap
+           border-b border-border;
+  }
+  [data-slot="table-head"]:has([data-slot="checkbox"]) {
+    @apply pe-0;
+  }
+
+  /* --- Body Cell ---------------------------------------------------------- */
+  [data-slot="table-cell"] {
+    @apply py-3.5 px-5 text-[13px] text-muted-foreground border-b border-border
+           align-top;
+  }
+  [data-slot="table-cell"]:has([data-slot="checkbox"]) {
+    @apply pe-0;
+  }
+
+  /* --- Caption ------------------------------------------------------------ */
+  [data-slot="table-caption"] {
+    @apply mt-4 text-sm text-foreground-subtle;
+  }
+}

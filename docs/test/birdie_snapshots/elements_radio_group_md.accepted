@@ -1,0 +1,403 @@
+---
+version: 2.0.1
+title: elements/radio-group.md
+---
+# Radio Group
+
+A set of mutually exclusive options sharing a single name.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  radio_group.root(
+    [attribute.aria_label("Billing cycle"), attribute.class("w-fit")],
+    [
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("intro-plan-monthly"),
+          attribute.name("intro-plan"),
+          attribute.value("monthly"),
+          attribute.checked(True),
+        ]),
+        field.label([attribute.for("intro-plan-monthly")], [
+          html.text("Monthly"),
+        ]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("intro-plan-yearly"),
+          attribute.name("intro-plan"),
+          attribute.value("yearly"),
+        ]),
+        field.label([attribute.for("intro-plan-yearly")], [html.text("Yearly")]),
+      ]),
+    ],
+  )
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add radio_group
+```
+
+## Usage
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  radio_group.root([attribute.aria_label("Billing cycle")], [
+    radio_group.item([attribute.name("plan"), attribute.value("monthly")]),
+    radio_group.item([attribute.name("plan"), attribute.value("yearly")]),
+  ])
+}
+```
+
+## Examples
+
+Compose radio items with field helpers to label and group the options, or set their state with standard attributes.
+
+### Description
+
+Pair each item with a field label and description to explain the options.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  radio_group.root(
+    [attribute.aria_label("Workspace plan"), attribute.class("w-fit max-w-sm")],
+    [
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-starter"),
+          attribute.name("workspace-plan"),
+          attribute.value("starter"),
+          attribute.checked(True),
+        ]),
+        field.content([], [
+          field.label([attribute.for("plan-starter")], [html.text("Starter")]),
+          field.description([], [
+            html.text("Up to 5 projects and 2 GB of storage."),
+          ]),
+        ]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-team"),
+          attribute.name("workspace-plan"),
+          attribute.value("team"),
+        ]),
+        field.content([], [
+          field.label([attribute.for("plan-team")], [html.text("Team")]),
+          field.description([], [
+            html.text("Unlimited projects and 100 GB of storage."),
+          ]),
+        ]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-enterprise"),
+          attribute.name("workspace-plan"),
+          attribute.value("enterprise"),
+        ]),
+        field.content([], [
+          field.label([attribute.for("plan-enterprise")], [
+            html.text("Enterprise"),
+          ]),
+          field.description([], [
+            html.text("Dedicated support and a custom contract."),
+          ]),
+        ]),
+      ]),
+    ],
+  )
+}
+```
+
+### Radio Card
+
+Wrap each field in a label so the whole card selects its option.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  radio_group.root(
+    [attribute.aria_label("Pricing tier"), attribute.class("max-w-sm")],
+    [
+      field.label([], [
+        field.root(
+          [
+            field.horizontal(),
+          ],
+          [
+            radio_group.item([
+              attribute.id("tier-plus"),
+              attribute.name("pricing-tier"),
+              attribute.value("plus"),
+              attribute.checked(True),
+            ]),
+            field.content([], [
+              field.title([], [html.text("Plus")]),
+              field.description([], [
+                html.text("For individuals getting started."),
+              ]),
+            ]),
+          ],
+        ),
+      ]),
+      field.label([], [
+        field.root(
+          [
+            field.horizontal(),
+          ],
+          [
+            radio_group.item([
+              attribute.id("tier-pro"),
+              attribute.name("pricing-tier"),
+              attribute.value("pro"),
+            ]),
+            field.content([], [
+              field.title([], [html.text("Pro")]),
+              field.description([], [
+                html.text("For teams that need more room to grow."),
+              ]),
+            ]),
+          ],
+        ),
+      ]),
+      field.label([], [
+        field.root(
+          [
+            field.horizontal(),
+          ],
+          [
+            radio_group.item([
+              attribute.id("tier-enterprise"),
+              attribute.name("pricing-tier"),
+              attribute.value("enterprise"),
+            ]),
+            field.content([], [
+              field.title([], [html.text("Enterprise")]),
+              field.description([], [
+                html.text("Advanced controls and dedicated support."),
+              ]),
+            ]),
+          ],
+        ),
+      ]),
+    ],
+  )
+}
+```
+
+### Field Set
+
+Group related options in a field set with a legend and description.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  field.set([attribute.class("w-fit")], [
+    field.legend([attribute.id("subscription-plan-legend")], [
+      html.text("Subscription plan"),
+    ]),
+    field.description([], [
+      html.text("Pick the billing cycle that works best for you."),
+    ]),
+    radio_group.root([attribute.aria_labelledby("subscription-plan-legend")], [
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-monthly"),
+          attribute.name("subscription-plan"),
+          attribute.value("monthly"),
+          attribute.checked(True),
+        ]),
+        field.label([attribute.for("plan-monthly")], [html.text("Monthly")]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-yearly"),
+          attribute.name("subscription-plan"),
+          attribute.value("yearly"),
+        ]),
+        field.label([attribute.for("plan-yearly")], [html.text("Yearly")]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("plan-lifetime"),
+          attribute.name("subscription-plan"),
+          attribute.value("lifetime"),
+        ]),
+        field.label([attribute.for("plan-lifetime")], [
+          html.text("Lifetime"),
+        ]),
+      ]),
+    ]),
+  ])
+}
+```
+
+### Disabled
+
+Pass the disabled attribute to prevent interaction and remove items from the focus order.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  radio_group.root(
+    [attribute.aria_label("Shipping speed"), attribute.class("w-fit")],
+    [
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("disabled-standard"),
+          attribute.name("shipping-speed"),
+          attribute.value("standard"),
+          attribute.disabled(True),
+        ]),
+        field.label([attribute.for("disabled-standard")], [
+          html.text("Standard"),
+        ]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("disabled-priority"),
+          attribute.name("shipping-speed"),
+          attribute.value("priority"),
+          attribute.disabled(True),
+          attribute.checked(True),
+        ]),
+        field.label([attribute.for("disabled-priority")], [
+          html.text("Priority"),
+        ]),
+      ]),
+    ],
+  )
+}
+```
+
+### Invalid
+
+Set aria-invalid on each item to surface validation errors, along with a field error for the message.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/field
+import ui/radio_group
+
+pub fn view() -> Element(message) {
+  field.root([field.vertical(), attribute.class("w-fit")], [
+    radio_group.root([attribute.aria_label("Contact method")], [
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("contact-email"),
+          attribute.name("contact-method"),
+          attribute.value("email"),
+          attribute.aria_invalid("true"),
+        ]),
+        field.label([attribute.for("contact-email")], [html.text("Email")]),
+      ]),
+      field.root([field.horizontal()], [
+        radio_group.item([
+          attribute.id("contact-phone"),
+          attribute.name("contact-method"),
+          attribute.value("phone"),
+          attribute.aria_invalid("true"),
+        ]),
+        field.label([attribute.for("contact-phone")], [html.text("Phone")]),
+      ]),
+    ]),
+    field.error([], [html.text("Pick a contact method to continue.")]),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+The group wrapper and the radio items it contains.
+
+| Element | Description |
+| --- | --- |
+| `radio_group.root(attrs, children)` | Wraps the radio items and applies role="radiogroup". |
+| `radio_group.item(attrs)` | Renders a native radio input with a layered dot indicator. |
+
+### Attributes
+
+Standard Lustre attributes the radio group responds to. Pass them through the attribute list of each item unless noted otherwise.
+
+| Attribute | Description |
+| --- | --- |
+| `attribute.name("plan")` | Form field name shared by every item in the group; the browser enforces mutual exclusion. |
+| `attribute.value("monthly")` | Value submitted when this item is the selected one. |
+| `attribute.checked(True)` | Marks the item as the selected option; fills the primary surface and shows the inner dot. |
+| `attribute.disabled(True)` | Locks the item, dims it, and removes it from the focus order. |
+| `attribute.required(True)` | Marks the item as required; field.label surfaces an accent asterisk. |
+| `attribute.aria_invalid("true")` | Surfaces the destructive border and ring on validation failure. |
+| `attribute.id("plan-monthly")` | Pair with field.label's for attribute to extend the click target and announce the label. |
+| `attribute.aria_label("...")` | Gives the group its accessible name; passes into the root's attribute list. The radiogroup role is only reliably announced when the group is named. |
+| `attribute.aria_labelledby("...")` | Names the group from a visible element instead, such as a field set legend's id. |
+
+### Selectors
+
+CSS selectors stamped on the radio group's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="radio-group"]` | The root container. |
+| `[data-slot="radio-group-item"]` | The wrapping span around each input. |
+| `[data-slot="radio-group-item"] > input` | The native <input type="radio">. |
+| `[data-slot="radio-group-item"] > input:checked` | A selected item. |
+| `[data-slot="radio-group-item"] > input:disabled` | A locked item. |
+| `[data-slot="radio-group-item"] > input[aria-invalid="true"]` | An item in a validation-failure state. |
+| `[data-slot="radio-group-indicator"]` | The dot layered over the selected item. |
+
+## Accessibility
+
+**Native semantics, keyboard ready.** Each item renders a native radio input inside a role="radiogroup" wrapper, so arrow-key navigation and mutual exclusion come from the browser and assistive tech announces the items as one group. Pair every item with a field label so screen readers announce the option, and name the group itself with `attribute.aria_label` or by pointing `attribute.aria_labelledby` at a field set legend's id.
+
+### Keyboard
+
+| Key | Action |
+| --- | --- |
+| Tab | Move focus to the selected item, or the first item when none is selected. |
+| Shift + Tab | Move focus to the previous focusable element. |
+| ArrowDown | Move focus to the next item and select it. |
+| ArrowUp | Move focus to the previous item and select it. |
+| ArrowRight | Move focus to the next item and select it. |
+| ArrowLeft | Move focus to the previous item and select it. |
+| Space | Select the focused item. |
+

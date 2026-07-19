@@ -1,0 +1,14 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="spinner"] {
+    @apply size-4 shrink-0 animate-spin;
+  }
+
+  /* --- Reduced Motion ----------------------------------------------------- */
+  /* Slow the spin rather than freeze it: a static spinner reads as a stall. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="spinner"] {
+      animation-duration: 6s;
+    }
+  }
+}

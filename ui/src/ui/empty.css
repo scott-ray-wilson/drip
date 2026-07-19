@@ -1,0 +1,68 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="empty"] {
+    @apply flex w-full min-w-0 flex-1 flex-col items-center justify-center
+           gap-4 rounded-lg p-6 text-center text-balance;
+  }
+
+  /* --- Outline (Variant) -------------------------------------------------- */
+  [data-slot="empty"][data-variant="outline"] {
+    @apply border border-dashed border-border;
+  }
+
+  /* --- Header ------------------------------------------------------------- */
+  [data-slot="empty-header"] {
+    @apply flex max-w-sm flex-col items-center gap-2;
+  }
+
+  /* --- Media -------------------------------------------------------------- */
+  [data-slot="empty-media"],
+  [data-slot="empty-icon"] {
+    @apply mb-2 flex shrink-0 items-center justify-center;
+  }
+  [data-slot="empty-media"] svg,
+  [data-slot="empty-icon"] svg {
+    @apply pointer-events-none shrink-0;
+  }
+
+  /* --- Icon --------------------------------------------------------------- */
+  [data-slot="empty-icon"] {
+    @apply size-8 rounded-sm bg-muted text-foreground;
+  }
+  [data-slot="empty-icon"] svg:not([class*="size-"]) {
+    @apply size-4;
+  }
+
+  /* --- Title -------------------------------------------------------------- */
+  [data-slot="empty-title"] {
+    @apply font-display text-base leading-snug font-medium;
+  }
+
+  /* --- Description -------------------------------------------------------- */
+  [data-slot="empty-description"] {
+    @apply text-sm/relaxed text-muted-foreground;
+  }
+  [data-slot="empty-description"] a {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="empty-description"] a:hover {
+    @apply text-foreground;
+  }
+  [data-slot="empty-description"] a:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+
+  /* --- Content ------------------------------------------------------------ */
+  [data-slot="empty-content"] {
+    @apply flex w-full max-w-sm min-w-0 flex-col items-center gap-2.5 text-sm;
+  }
+  [data-slot="empty-content"] a:not([data-slot="button"]) {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="empty-content"] a:not([data-slot="button"]):hover {
+    @apply text-foreground;
+  }
+  [data-slot="empty-content"] a:not([data-slot="button"]):focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+}

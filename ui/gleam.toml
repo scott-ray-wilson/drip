@@ -1,0 +1,16 @@
+name = "ui"
+description = "Source for Drip's UI elements: the Gleam and CSS vendored into consumer projects."
+version = "1.0.0"
+target = "javascript"
+
+licences = ["MIT"]
+
+# Internal package: never published to Hex (see ../PUBLISHING.md).
+
+[dependencies]
+gleam_stdlib = ">= 1.0.0 and < 2.0.0"
+lustre = ">= 5.7.0 and < 6.0.0"
+lustre_portal = ">= 1.0.1 and < 2.0.0"
+
+[dev_dependencies]
+gleeunit = ">= 1.0.0 and < 2.0.0"

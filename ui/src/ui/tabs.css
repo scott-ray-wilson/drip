@@ -1,0 +1,138 @@
+@layer components {
+  /* --- Root --------------------------------------------------------------- */
+  [data-slot="tabs"] {
+    @apply flex gap-2;
+  }
+  [data-slot="tabs"]:not([data-orientation="vertical"]) {
+    @apply flex-col;
+  }
+  [data-slot="tabs"][data-orientation="vertical"] {
+    @apply gap-0 rounded-md border border-border;
+  }
+
+  /* --- List --------------------------------------------------------------- */
+  [data-slot="tabs-list"] {
+    @apply inline-flex w-fit items-center justify-center rounded-md p-[3px]
+           text-muted-foreground;
+  }
+  [data-slot="tabs"]:not([data-orientation="vertical"])
+    > [data-slot="tabs-list"] {
+    @apply h-8;
+  }
+  [data-slot="tabs"][data-orientation="vertical"] > [data-slot="tabs-list"] {
+    @apply h-fit w-[200px] flex-col items-stretch justify-start gap-1 p-3
+           rounded-none border-r border-border bg-card/40;
+  }
+  [data-slot="tabs-list"]:not([data-variant="line"]) {
+    @apply bg-muted;
+  }
+  [data-slot="tabs-list"][data-variant="line"] {
+    @apply w-full justify-start gap-1 rounded-none border-b border-border
+           bg-transparent p-0;
+  }
+  [data-slot="tabs"][data-orientation="vertical"]
+    > [data-slot="tabs-list"]:not([data-variant="line"]) {
+    @apply bg-transparent;
+  }
+
+  /* --- Trigger ------------------------------------------------------------ */
+  [data-slot="tabs-trigger"] {
+    @apply relative inline-flex h-[calc(100%-1px)] flex-1 cursor-pointer
+           items-center justify-center gap-1.5 whitespace-nowrap
+           border border-transparent px-1.5 py-0.5 text-sm
+           text-muted-foreground transition-all rounded-xs;
+  }
+  [data-slot="tabs"][data-orientation="vertical"] [data-slot="tabs-trigger"] {
+    @apply h-auto w-full justify-start gap-2.5 px-3 py-2;
+  }
+  [data-slot="tabs-list"][data-variant="line"] [data-slot="tabs-trigger"] {
+    @apply h-auto flex-none px-3.5 py-1.5;
+  }
+  [data-slot="tabs-trigger"]:hover {
+    @apply text-foreground;
+  }
+  [data-slot="tabs-trigger"]:focus-visible {
+    @apply outline-2 outline-offset-0 border-outline!;
+  }
+  [data-slot="tabs-trigger"]:disabled {
+    @apply pointer-events-none opacity-50;
+  }
+  [data-slot="tabs-trigger"]:has([data-icon="inline-end"]) {
+    @apply pr-1;
+  }
+  [data-slot="tabs-trigger"]:has([data-icon="inline-start"]) {
+    @apply pl-1;
+  }
+
+  /* Trigger SVGs */
+  [data-slot="tabs-trigger"] svg {
+    @apply pointer-events-none shrink-0;
+  }
+  [data-slot="tabs-trigger"] svg:not([class*="size-"]) {
+    @apply size-4;
+  }
+
+  /* Active state: default (pill) variant */
+  [data-slot="tabs-trigger"][data-active="true"] {
+    @apply border-border bg-background text-foreground;
+  }
+  [data-slot="tabs-list"]:not([data-variant="line"])
+    [data-slot="tabs-trigger"][data-active="true"] {
+    @apply shadow-sm;
+  }
+  /* Dark lists need a lift above the muted track, not the light recess. */
+  .dark [data-slot="tabs-trigger"][data-active="true"] {
+    @apply border-border-strong bg-foreground/10;
+  }
+
+  /* Line variant: accent text, transparent surface, underline-only */
+  [data-slot="tabs-list"][data-variant="line"] [data-slot="tabs-trigger"] {
+    @apply bg-transparent;
+  }
+  [data-slot="tabs-list"][data-variant="line"]
+    [data-slot="tabs-trigger"][data-active="true"] {
+    @apply border-transparent bg-transparent text-accent shadow-none;
+  }
+
+  /* Vertical orientation: accent-bordered active row */
+  [data-slot="tabs"][data-orientation="vertical"]
+    [data-slot="tabs-trigger"][data-active="true"] {
+    @apply border-accent bg-card/60;
+  }
+  [data-slot="tabs"][data-orientation="vertical"]
+    [data-slot="tabs-trigger"][data-active="true"]
+    svg {
+    @apply text-accent;
+  }
+
+  /* Line indicator (::after): only shown on the line variant when active */
+  [data-slot="tabs-trigger"]::after {
+    content: "";
+    @apply absolute opacity-0 transition-opacity;
+  }
+  [data-slot="tabs"]:not([data-orientation="vertical"])
+    [data-slot="tabs-trigger"]::after {
+    @apply inset-x-0 -bottom-[0.5px] h-px bg-accent;
+  }
+  [data-slot="tabs"][data-orientation="vertical"]
+    [data-slot="tabs-trigger"]::after {
+    @apply inset-y-0 -right-1 w-0.5 bg-foreground;
+  }
+  [data-slot="tabs-list"][data-variant="line"]
+    [data-slot="tabs-trigger"][data-active="true"]::after {
+    @apply opacity-100;
+  }
+
+  /* --- Content ------------------------------------------------------------ */
+  /* The transparent border reserves the focus ring border so :focus-visible
+     never shifts layout. */
+  [data-slot="tabs-content"] {
+    @apply flex-1 border border-transparent text-sm rounded-xs;
+  }
+  [data-slot="tabs-content"]:focus-visible {
+    @apply outline-2 outline-offset-0 border-outline!;
+  }
+  [data-slot="tabs"][data-orientation="vertical"] > [data-slot="tabs-content"] {
+    @apply p-5;
+  }
+}

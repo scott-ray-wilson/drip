@@ -1,0 +1,31 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  /* The rule is drawn by the two pseudo-element halves; with no content they
+     meet in the middle and read as one unbroken line. */
+  [data-slot="separator"] {
+    @apply flex w-full shrink-0 items-center;
+  }
+  [data-slot="separator"]::before,
+  [data-slot="separator"]::after {
+    content: "";
+    @apply h-px flex-1 bg-border;
+  }
+  [data-slot="separator"][data-content="true"] {
+    @apply gap-2.5;
+  }
+
+  /* --- Content ------------------------------------------------------------ */
+  [data-slot="separator-content"] {
+    @apply shrink-0 font-medium text-foreground-subtle tracking-wider
+           uppercase text-2xs;
+  }
+
+  /* --- Vertical (Orientation) --------------------------------------------- */
+  [data-slot="separator"][data-orientation="vertical"] {
+    @apply w-auto flex-col self-stretch;
+  }
+  [data-slot="separator"][data-orientation="vertical"]::before,
+  [data-slot="separator"][data-orientation="vertical"]::after {
+    @apply h-auto w-px;
+  }
+}

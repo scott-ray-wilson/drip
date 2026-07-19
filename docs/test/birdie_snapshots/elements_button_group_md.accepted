@@ -1,0 +1,244 @@
+---
+version: 2.0.1
+title: elements/button-group.md
+---
+# Button Group
+
+A row or column of related buttons joined into a single semantic unit.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/button_group
+import ui/icon
+
+pub fn view() -> Element(message) {
+  button_group.root([attribute.aria_label("Editor actions")], [
+    button_group.root([], [
+      button.button(
+        [
+          button.primary(),
+          button.icon_only(),
+          attribute.aria_label("Back"),
+        ],
+        [icon.arrow_left([])],
+      ),
+    ]),
+    button_group.root([], [
+      button.button([button.primary()], [html.text("Save")]),
+      button_group.separator([]),
+      button.button([button.primary()], [html.text("Preview")]),
+    ]),
+    button_group.root([], [
+      button.button([button.primary()], [html.text("Publish")]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add button_group
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/button_group
+
+pub fn view() -> Element(message) {
+  button_group.root([button_group.horizontal()], [
+    button.button([button.outline()], [html.text("Action")]),
+    button.button([button.outline()], [html.text("Action")]),
+  ])
+}
+```
+
+## Examples
+
+Lay a group out horizontally or vertically, then extend it with separators, nested groups, and inputs.
+
+### Horizontal
+
+Arrange buttons in a row sharing vertical borders using the horizontal attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/button_group
+import ui/icon
+
+pub fn view() -> Element(message) {
+  button_group.root(
+    [button_group.horizontal(), attribute.aria_label("Clipboard actions")],
+    [
+      button.button([button.outline()], [
+        icon.copy([button.icon_start()]),
+        html.text("Copy"),
+      ]),
+      button.button([button.outline()], [
+        icon.clipboard_paste([button.icon_start()]),
+        html.text("Paste"),
+      ]),
+    ],
+  )
+}
+```
+
+### Vertical
+
+Stack buttons into a column sharing horizontal borders using the vertical attribute.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import ui/button
+import ui/button_group
+import ui/icon
+
+pub fn view() -> Element(message) {
+  button_group.root(
+    [button_group.vertical(), attribute.aria_label("Zoom controls")],
+    [
+      button.button(
+        [button.primary(), button.icon_only(), attribute.aria_label("Zoom in")],
+        [icon.plus([])],
+      ),
+      button_group.separator([]),
+      button.button(
+        [
+          button.primary(),
+          button.icon_only(),
+          attribute.aria_label("Zoom out"),
+        ],
+        [icon.minus([])],
+      ),
+    ],
+  )
+}
+```
+
+### Separator
+
+Add a divider between buttons to separate related controls.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/button_group
+import ui/icon
+
+pub fn view() -> Element(message) {
+  button_group.root([attribute.aria_label("Pagination")], [
+    button.button([button.primary()], [
+      icon.arrow_left([button.icon_start()]),
+      html.text("Previous"),
+    ]),
+    button_group.separator([]),
+    button.button([button.primary()], [
+      html.text("Next"),
+      icon.arrow_right([button.icon_end()]),
+    ]),
+  ])
+}
+```
+
+### Nested
+
+Nest button groups inside a parent group to split actions into clusters.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/button_group
+import ui/icon
+
+pub fn view() -> Element(message) {
+  button_group.root([attribute.aria_label("Message actions")], [
+    button_group.root([], [
+      button.button([button.outline()], [html.text("Archive")]),
+      button.button([button.outline()], [html.text("Report")]),
+      button.button([button.outline()], [html.text("Snooze")]),
+    ]),
+    button_group.root([], [
+      button.button(
+        [button.outline(), button.icon_only(), attribute.aria_label("More")],
+        [icon.ellipsis([])],
+      ),
+    ]),
+  ])
+}
+```
+
+### Text Field
+
+Combine a text field with a button to build a search field or inline action.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import ui/button
+import ui/button_group
+import ui/icon
+import ui/text_field
+
+pub fn view() -> Element(message) {
+  button_group.root([attribute.aria_label("Search")], [
+    text_field.input([attribute.placeholder("Search...")]),
+    button.button(
+      [button.secondary(), button.icon_only(), attribute.aria_label("Search")],
+      [icon.search([])],
+    ),
+  ])
+}
+```
+
+## API Reference
+
+### Elements
+
+The root container and the separator slot that compose the inside of a group.
+
+| Element | Description |
+| --- | --- |
+| `button_group.root(attrs, children)` | The root container. Carries the group role and the orientation attribute. |
+| `button_group.separator(attrs)` | Divider that breaks a group into clusters of buttons. |
+
+### Attributes
+
+Pass these into the root's attribute list. The orientation defaults to horizontal.
+
+| Attribute | Description |
+| --- | --- |
+| `button_group.horizontal()` | A row of related buttons that share vertical borders. |
+| `button_group.vertical()` | A stack of related buttons that share horizontal borders. |
+| `attribute.aria_label("...")` | Gives the group its accessible name. The group role is only reliably announced when the group is named. |
+
+### Selectors
+
+CSS selectors stamped on the button group's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="button-group"]` | The root container. |
+| `[data-slot="button-group"][data-orientation="..."]` | The root, tagged with its active orientation. |
+| `[data-slot="button-group-separator"]` | The divider between two children. |
+
+## Accessibility
+
+**Announced as a related group.** The wrapper carries the ARIA group role, so assistive tech announces the surrounding buttons as one related set. Each child keeps its own native semantics; a button is still a button, an anchor is still an anchor. The role is only reliably announced when the group has a name, so give each group an accessible name with aria-label.
+

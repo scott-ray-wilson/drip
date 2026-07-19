@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Drip Elements: UI elements for Lustre you own">
+  <title>Drip Elements: UI elements for Lustre you own</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c1019" />
+      <stop offset="1" stop-color="#090c14" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffaff3" stop-opacity="0.14" />
+      <stop offset="1" stop-color="#ffaff3" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- dark backdrop with a soft accent glow -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1120" cy="70" r="460" fill="url(#glow)" />
+
+  <!-- brand lockup: flat pink outline mark (same glyph as the favicon) + wordmark -->
+  <g transform="translate(95 95) scale(2.3)" fill="none" stroke="#ffaff3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2" />
+    <rect x="14" y="2" width="8" height="8" rx="1" />
+  </g>
+  <text x="164" y="146" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="58" font-weight="800" letter-spacing="-1" fill="#f3f4f7">Drip Elements</text>
+
+  <!-- headline -->
+  <text x="100" y="342" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="76" font-weight="800" letter-spacing="-2" fill="#f3f4f7">Own your source.</text>
+  <text x="100" y="430" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="76" font-weight="800" letter-spacing="-2" fill="#ffaff3">UI elements for Lustre.</text>
+
+  <!-- sub-tagline -->
+  <text x="102" y="486" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" font-weight="400" fill="#a9b0bc">Accessible by default, themeable through CSS variables, yours to edit.</text>
+
+  <!-- footer: globe icon marks drip.pink as a URL -->
+  <g transform="translate(100 567)" fill="none" stroke="#ffaff3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+  </g>
+  <text x="136" y="588" font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="26" font-weight="400" fill="#ffaff3">drip.pink</text>
+  <text x="1100" y="588" text-anchor="end" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="24" font-weight="400" fill="#a9b0bc">MIT Licensed</text>
+</svg>

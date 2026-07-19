@@ -1,0 +1,150 @@
+---
+version: 2.0.1
+title: elements/separator.md
+---
+# Separator
+
+A thin divider for visually separating content.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/separator
+import ui/typography
+
+pub fn view() -> Element(message) {
+  html.div([attribute.class("flex flex-col gap-4 w-[320px]")], [
+    typography.body([], [html.text("A horizontal separator splits stacks.")]),
+    separator.root([], []),
+    html.div([attribute.class("flex h-5 items-center gap-4 text-sm")], [
+      html.span([], [html.text("Docs")]),
+      separator.root([separator.vertical()], []),
+      html.span([], [html.text("Source")]),
+      separator.root([separator.vertical()], []),
+      html.span([], [html.text("Issues")]),
+    ]),
+  ])
+}
+```
+
+## Installation
+
+Install this element and its dependencies with the Drip CLI:
+
+```sh
+gleam run -m drip -- add separator
+```
+
+## Usage
+
+```gleam
+import lustre/element.{type Element}
+import ui/separator
+
+pub fn view() -> Element(message) {
+  separator.root([], [])
+}
+```
+
+## Examples
+
+Set the rule's axis with the orientation attributes, or break the line with centered content.
+
+### Horizontal
+
+Pass the horizontal attribute to lay the rule across the parent's inline width. This is the default orientation.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/separator
+import ui/typography
+
+pub fn view() -> Element(message) {
+  html.div([attribute.class("flex flex-col gap-3 w-[320px]")], [
+    typography.body([], [html.text("Above the line.")]),
+    separator.root([separator.horizontal()], []),
+    typography.body([], [html.text("Below the line.")]),
+  ])
+}
+```
+
+### Vertical
+
+Pass the vertical attribute to stretch the rule to the parent's block height.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/separator
+
+pub fn view() -> Element(message) {
+  html.div([attribute.class("flex h-5 items-center gap-4 text-sm")], [
+    html.span([], [html.text("Inbox")]),
+    separator.root([separator.vertical()], []),
+    html.span([], [html.text("Drafts")]),
+    separator.root([separator.vertical()], []),
+    html.span([], [html.text("Sent")]),
+  ])
+}
+```
+
+### Content
+
+Pass children to the separator to render centered content over the line.
+
+```gleam
+import lustre/attribute
+import lustre/element.{type Element}
+import lustre/element/html
+import ui/button
+import ui/separator
+
+pub fn view() -> Element(message) {
+  html.div([attribute.class("flex flex-col gap-3 w-[320px]")], [
+    button.button([button.primary()], [html.text("Sign in with email")]),
+    separator.root([], [html.text("or")]),
+    button.button([button.outline()], [
+      html.text("Continue with a single-use link"),
+    ]),
+  ])
+}
+```
+
+## API Reference
+
+### Orientation Attributes
+
+Two orientation attributes, one per axis. Pass one into the root's attribute list.
+
+| Attribute | Description |
+| --- | --- |
+| `separator.horizontal()` | Lays the rule along the inline axis, filling the parent's width; the default when no orientation attribute is set. |
+| `separator.vertical()` | Lays the rule along the block axis, stretching to fill the parent's height; requires a flex parent so the stretch can resolve. |
+
+### Elements
+
+A single root element. Children are optional; most separators are plain rules.
+
+| Element | Description |
+| --- | --- |
+| `separator.root(attrs, children)` | The separator rule. Pass children to render centered content over the line. |
+
+### Selectors
+
+CSS selectors stamped on the separator's markup, available for overriding or layering app-specific styles.
+
+| Selector | Matches |
+| --- | --- |
+| `[data-slot="separator"]` | The separator root. |
+| `[data-orientation="horizontal\|vertical"]` | The root, tagged when an orientation attribute is applied. |
+| `[data-content="true"]` | The root, tagged when centered content is present. |
+| `[data-slot="separator-content"]` | The wrapper around centered content. |
+
+## Accessibility
+
+**Decorative by default.** Each separator carries a fixed role="none": the rule is a visual cue, not a semantic boundary, and assistive tech skips it while still reading any centered content. If a division between regions should be announced, render your own element with role="separator" and stamp data-slot="separator" on it to reuse the rule's styling.
+

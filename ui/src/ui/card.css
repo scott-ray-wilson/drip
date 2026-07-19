@@ -1,0 +1,113 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  [data-slot="card"] {
+    @apply flex flex-col overflow-hidden rounded-2xl bg-card text-sm
+           text-card-foreground border border-border;
+  }
+
+  /* --- Small (Size) ------------------------------------------------------- */
+  [data-slot="card"][data-size="sm"] {
+    @apply gap-3 py-3;
+  }
+
+  /* --- Medium (Default Size) ---------------------------------------------- */
+  [data-slot="card"]:not([data-size]),
+  [data-slot="card"][data-size="md"] {
+    @apply gap-4 py-4;
+  }
+
+  /* --- Large (Size) ------------------------------------------------------- */
+  [data-slot="card"][data-size="lg"] {
+    @apply gap-5 py-6;
+  }
+
+  /* --- Edge-to-Edge Images ------------------------------------------------ */
+  /* The vertical padding drops so the image sits flush; the root's
+     overflow-hidden clips its corners to the card radius. */
+  [data-slot="card"]:has(> img:first-child) {
+    @apply pt-0;
+  }
+  [data-slot="card"]:has(> img:last-child) {
+    @apply pb-0;
+  }
+
+  /* --- Header ------------------------------------------------------------- */
+  [data-slot="card-header"] {
+    @apply grid auto-rows-min items-start gap-1 px-4;
+  }
+  [data-slot="card-header"]:has(> [data-slot="card-action"]) {
+    @apply grid-cols-[1fr_auto];
+  }
+  [data-slot="card-header"]:has(> [data-slot="card-description"]) {
+    @apply grid-rows-[auto_auto];
+  }
+  [data-slot="card-header"]:has(> [data-slot="card-eyebrow"]):has(
+      > [data-slot="card-description"]
+    ) {
+    @apply grid-rows-[auto_auto_auto];
+  }
+  [data-slot="card"][data-size="sm"] > [data-slot="card-header"] {
+    @apply px-3;
+  }
+  [data-slot="card"][data-size="lg"] > [data-slot="card-header"] {
+    @apply px-6;
+  }
+
+  /* --- Eyebrow ------------------------------------------------------------ */
+  [data-slot="card-eyebrow"] {
+    @apply inline-flex text-2xs leading-4 tracking-widest uppercase
+           font-medium text-muted-foreground;
+  }
+
+  /* --- Title -------------------------------------------------------------- */
+  [data-slot="card-title"] {
+    @apply font-display text-base leading-snug font-medium;
+  }
+  [data-slot="card"][data-size="sm"]
+    > [data-slot="card-header"]
+    > [data-slot="card-title"] {
+    @apply text-sm;
+  }
+  [data-slot="card"][data-size="lg"]
+    > [data-slot="card-header"]
+    > [data-slot="card-title"] {
+    @apply text-lg font-bold;
+  }
+
+  /* --- Description -------------------------------------------------------- */
+  [data-slot="card-description"] {
+    @apply text-[13px] leading-5 text-muted-foreground;
+  }
+
+  /* --- Action ------------------------------------------------------------- */
+  [data-slot="card-action"] {
+    @apply col-start-2 row-span-2 row-start-1 self-start justify-self-end;
+  }
+
+  /* --- Content ------------------------------------------------------------ */
+  [data-slot="card-content"] {
+    @apply px-4;
+  }
+  [data-slot="card"][data-size="sm"] > [data-slot="card-content"] {
+    @apply px-3;
+  }
+  [data-slot="card"][data-size="lg"] > [data-slot="card-content"] {
+    @apply px-6;
+  }
+
+  /* --- Footer ------------------------------------------------------------- */
+  [data-slot="card-footer"] {
+    @apply flex items-center border-t border-border bg-muted/25 p-4;
+  }
+  [data-slot="card"][data-size="sm"] > [data-slot="card-footer"] {
+    @apply p-3;
+  }
+  [data-slot="card"][data-size="lg"] > [data-slot="card-footer"] {
+    @apply p-6;
+  }
+  /* Specificity ties with the size rules; the flush bottom wins by source
+     order, so keep this rule after them. */
+  [data-slot="card"]:has(> [data-slot="card-footer"]) {
+    @apply pb-0;
+  }
+}

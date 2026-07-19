@@ -1,0 +1,127 @@
+@layer components {
+  /* --- Base --------------------------------------------------------------- */
+  /* Icon | content | close columns. The flanking columns collapse to zero
+     width when their slot is absent, so the gutters live on the slots as
+     margins rather than a uniform column-gap. */
+  [data-slot="alert"] {
+    @apply grid grid-cols-[auto_minmax(0,1fr)_auto] items-start px-5 py-4.5
+           border border-border rounded-md bg-card/40 text-left;
+  }
+  [data-slot="alert"]
+    > :not([data-slot="alert-icon"], [data-slot="alert-close"]) {
+    @apply col-start-2;
+  }
+
+  /* --- Icon --------------------------------------------------------------- */
+  /* Spans the content rows so the tile's height stretches the alert as a
+     whole, not the title row (which would push the description down). */
+  [data-slot="alert-icon"] {
+    @apply inline-flex items-center justify-center w-7 h-7 rounded-sm
+           col-start-1 row-span-3 row-start-1 mt-px mr-3.5 border
+           border-border;
+  }
+  [data-slot="alert-icon"] > svg {
+    @apply size-4 shrink-0;
+  }
+
+  /* --- Title -------------------------------------------------------------- */
+  [data-slot="alert-title"] {
+    @apply font-display font-bold text-sm leading-4.5 m-0 mb-1
+           text-foreground;
+  }
+  [data-slot="alert-title"] a {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="alert-title"] a:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+
+  /* --- Description -------------------------------------------------------- */
+  [data-slot="alert-description"] {
+    @apply font-sans text-[13px] leading-4.5 text-muted-foreground m-0;
+  }
+  [data-slot="alert-description"] a {
+    @apply underline underline-offset-2 rounded-xs;
+  }
+  [data-slot="alert-description"] a:hover {
+    @apply text-foreground;
+  }
+  [data-slot="alert-description"] a:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+
+  /* --- Actions ------------------------------------------------------------ */
+  [data-slot="alert-actions"] {
+    @apply flex gap-2 mt-2.5;
+  }
+
+  /* --- Close -------------------------------------------------------------- */
+  /* The ::after overlay pads the hit target out to 26px without growing the
+     18px visual box. */
+  [data-slot="alert-close"] {
+    @apply relative bg-transparent border-none text-foreground-subtle
+           cursor-pointer p-0 w-4.5 h-4.5 inline-flex items-center
+           justify-center col-start-3 row-start-1 ml-3.5 transition-colors
+           after:absolute after:-inset-1 rounded-xs;
+  }
+  [data-slot="alert-close"]:hover {
+    @apply text-foreground;
+  }
+  [data-slot="alert-close"]:focus-visible {
+    @apply outline-2 ring ring-outline outline-offset-1;
+  }
+  [data-slot="alert-close"] > svg {
+    @apply size-3.5;
+  }
+
+  /* --- Info (Variant) ----------------------------------------------------- */
+  [data-slot="alert"][data-variant="info"] {
+    @apply border-info/20 bg-info/8;
+  }
+  [data-slot="alert"][data-variant="info"] [data-slot="alert-icon"] {
+    @apply bg-info/10 border-info/25 text-info;
+  }
+
+  /* --- Success (Variant) -------------------------------------------------- */
+  [data-slot="alert"][data-variant="success"] {
+    @apply border-success/20 bg-success/8;
+  }
+  [data-slot="alert"][data-variant="success"] [data-slot="alert-icon"] {
+    @apply bg-success/10 border-success/25 text-success;
+  }
+
+  /* --- Warning (Variant) -------------------------------------------------- */
+  [data-slot="alert"][data-variant="warning"] {
+    @apply border-warning/25 bg-warning/8;
+  }
+  [data-slot="alert"][data-variant="warning"] [data-slot="alert-icon"] {
+    @apply bg-warning/10 border-warning/25 text-warning;
+  }
+
+  /* --- Error (Variant) ---------------------------------------------------- */
+  [data-slot="alert"][data-variant="error"] {
+    @apply border-error/25 bg-error/8;
+  }
+  [data-slot="alert"][data-variant="error"] [data-slot="alert-icon"] {
+    @apply bg-error/10 border-error/25 text-error;
+  }
+
+  /* --- Accent (Variant) --------------------------------------------------- */
+  [data-slot="alert"][data-variant="accent"] {
+    @apply border-accent/30 bg-accent/5;
+  }
+  [data-slot="alert"][data-variant="accent"] [data-slot="alert-icon"] {
+    @apply bg-accent/10 border-accent/20 text-accent;
+  }
+
+  /* --- Neutral (Default Variant) ------------------------------------------ */
+  [data-slot="alert"]:not([data-variant]) [data-slot="alert-icon"],
+  [data-slot="alert"][data-variant="neutral"] [data-slot="alert-icon"] {
+    @apply bg-accent/10 border-accent/20 text-accent;
+  }
+
+  /* --- Banner (Style Modifier) -------------------------------------------- */
+  [data-slot="alert"][data-style="banner"] {
+    @apply rounded-none border-x-0 border-t-0 px-6 py-3;
+  }
+}

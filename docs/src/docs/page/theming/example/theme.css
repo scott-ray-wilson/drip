@@ -1,0 +1,11 @@
+:root {
+  --radius: 0.75rem;
+
+  --accent: oklch(0.55 0.18 260);
+  --accent-foreground: oklch(0.99 0.005 260);
+}
+
+.dark {
+  --accent: oklch(0.78 0.14 260);
+  --accent-foreground: oklch(0.17 0.03 260);
+}

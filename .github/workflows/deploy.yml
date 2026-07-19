@@ -24,6 +24,9 @@ jobs:
         with:
           otp-version: "27"
           gleam-version: "1.17.0"
+          # build.sh's site build pulls in hpack_erl (via mist/glisten), which
+          # is built with rebar3.
+          rebar3-version: "3"
       - uses: actions/setup-node@v7 # build.sh's generate_md step requires node
         with:
           node-version: "22"

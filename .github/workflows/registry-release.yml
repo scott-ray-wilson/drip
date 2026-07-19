@@ -1,4 +1,4 @@
-name: registry-release
+name: Registry Release
 
 # Registry release: build the flat dist/ (registry.json index + element files +
 # theme.css) and publish it as a GitHub Release marked latest. The CLI fetches

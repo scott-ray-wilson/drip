@@ -1,4 +1,4 @@
-name: cli-release
+name: CLI Release
 
 # CLI release: publish the `drip` Hex package (cli/) when a `cli-v*` tag is
 # pushed. It publishes to Hex ONLY and creates NO GitHub Release.
